@@ -253,7 +253,7 @@ export default function Portfolio() {
             <a href="#Stack" onClick={() => setMenuOpen(false)} className="hover:text-cyan-300">Stack</a>
             <a href="#Certifications" onClick={() => setMenuOpen(false)} className="hover:text-cyan-300">Certifications</a>
             <a href="#Contact" onClick={() => setMenuOpen(false)} className="hover:text-cyan-300">Contact</a>
-            <a href="/Resume.pdf" download className="inline-flex items-center gap-1.5 text-cyan-300 w-fit">
+            <a href="/resume.pdf" download className="inline-flex items-center gap-1.5 text-cyan-300 w-fit">
               <Download className="w-3.5 h-3.5" /> Download Resume
             </a>
           </div>
@@ -304,7 +304,7 @@ export default function Portfolio() {
               <a href="https://github.com/ankit-k26" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 border border-white/15 text-slate-200 px-6 py-3 rounded-full hover:border-cyan-400/50 hover:text-cyan-300 transition-colors">
                 <Github className="w-4 h-4" /> GitHub
               </a>
-              <a href="/Resume.pdf" download className="inline-flex items-center gap-2 border border-white/15 text-slate-200 px-6 py-3 rounded-full hover:border-cyan-400/50 hover:text-cyan-300 transition-colors">
+              <a href="/resume.pdf" download className="inline-flex items-center gap-2 border border-white/15 text-slate-200 px-6 py-3 rounded-full hover:border-cyan-400/50 hover:text-cyan-300 transition-colors">
                 <Download className="w-4 h-4" /> Resume
               </a>
             </div>

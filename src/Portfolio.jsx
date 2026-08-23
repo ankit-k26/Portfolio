@@ -231,7 +231,7 @@ export default function Portfolio() {
             <a href="#Certifications" className="hover:text-cyan-300 transition-colors">Certifications</a>
             <a href="#Contact" className="hover:text-cyan-300 transition-colors">Contact</a>
             <a
-              href="/Resume.pdf"
+              href="/resume.pdf"
               download
               className="inline-flex items-center gap-1.5 border border-cyan-400/30 text-cyan-300 rounded-full px-3.5 py-1.5 hover:bg-cyan-400/10 transition-colors"
             >

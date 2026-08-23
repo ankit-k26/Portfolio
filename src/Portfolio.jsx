@@ -225,13 +225,13 @@ export default function Portfolio() {
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <span className="font-display font-bold text-lg tracking-tight text-white">Ankit<span className="text-cyan-400">.</span></span>
           <div className="hidden sm:flex items-center gap-8 text-sm text-slate-400 font-mono2">
-            <a href="#about" className="hover:text-cyan-300 transition-colors">about</a>
-            <a href="#projects" className="hover:text-cyan-300 transition-colors">projects</a>
-            <a href="#stack" className="hover:text-cyan-300 transition-colors">stack</a>
-            <a href="#certifications" className="hover:text-cyan-300 transition-colors">certs</a>
-            <a href="#contact" className="hover:text-cyan-300 transition-colors">contact</a>
+            <a href="#About" className="hover:text-cyan-300 transition-colors">About</a>
+            <a href="#Projects" className="hover:text-cyan-300 transition-colors">Projects</a>
+            <a href="#Stack" className="hover:text-cyan-300 transition-colors">Stack</a>
+            <a href="#Certifications" className="hover:text-cyan-300 transition-colors">Certifications</a>
+            <a href="#Contact" className="hover:text-cyan-300 transition-colors">Contact</a>
             <a
-              href="/resume.pdf"
+              href="/Resume.pdf"
               download
               className="inline-flex items-center gap-1.5 border border-cyan-400/30 text-cyan-300 rounded-full px-3.5 py-1.5 hover:bg-cyan-400/10 transition-colors"
             >
@@ -248,12 +248,12 @@ export default function Portfolio() {
         </div>
         {menuOpen && (
           <div className="sm:hidden border-t border-white/5 bg-slate-950/95 px-6 py-4 flex flex-col gap-4 text-sm font-mono2 text-slate-300">
-            <a href="#about" onClick={() => setMenuOpen(false)} className="hover:text-cyan-300">about</a>
-            <a href="#projects" onClick={() => setMenuOpen(false)} className="hover:text-cyan-300">projects</a>
-            <a href="#stack" onClick={() => setMenuOpen(false)} className="hover:text-cyan-300">stack</a>
-            <a href="#certifications" onClick={() => setMenuOpen(false)} className="hover:text-cyan-300">certifications</a>
-            <a href="#contact" onClick={() => setMenuOpen(false)} className="hover:text-cyan-300">contact</a>
-            <a href="/resume.pdf" download className="inline-flex items-center gap-1.5 text-cyan-300 w-fit">
+            <a href="#About" onClick={() => setMenuOpen(false)} className="hover:text-cyan-300">About</a>
+            <a href="#Projects" onClick={() => setMenuOpen(false)} className="hover:text-cyan-300">Projects</a>
+            <a href="#Stack" onClick={() => setMenuOpen(false)} className="hover:text-cyan-300">Stack</a>
+            <a href="#Certifications" onClick={() => setMenuOpen(false)} className="hover:text-cyan-300">Certifications</a>
+            <a href="#Contact" onClick={() => setMenuOpen(false)} className="hover:text-cyan-300">Contact</a>
+            <a href="/Resume.pdf" download className="inline-flex items-center gap-1.5 text-cyan-300 w-fit">
               <Download className="w-3.5 h-3.5" /> Download Resume
             </a>
           </div>
@@ -311,7 +311,7 @@ export default function Portfolio() {
           </Reveal>
         </div>
 
-        <a href="#about" aria-label="Scroll down" className="absolute bottom-8 left-1/2 -translate-x-1/2 text-slate-500 hover:text-cyan-300 transition-colors">
+        <a href="#About" aria-label="Scroll down" className="absolute bottom-8 left-1/2 -translate-x-1/2 text-slate-500 hover:text-cyan-300 transition-colors">
           <ArrowDown className="w-5 h-5 animate-bounce" />
         </a>
       </section>
@@ -319,9 +319,9 @@ export default function Portfolio() {
       <Waveform />
 
       {/* ABOUT */}
-      <section id="about" className="max-w-5xl mx-auto px-6 py-24">
+      <section id="About" className="max-w-5xl mx-auto px-6 py-24">
         <Reveal>
-          <p className="font-mono2 text-xs text-cyan-400/80 mb-3">// about</p>
+          <p className="font-mono2 text-xs text-cyan-400/80 mb-3">// About</p>
         </Reveal>
         <div className="grid md:grid-cols-2 gap-12 items-start">
           <Reveal delay={100}>
@@ -348,9 +348,9 @@ export default function Portfolio() {
       </section>
 
       {/* STACK — marquee */}
-      <section id="stack" className="py-16 border-y border-white/5 bg-white/[0.02]">
+      <section id="Stack" className="py-16 border-y border-white/5 bg-white/[0.02]">
         <Reveal>
-          <p className="font-mono2 text-xs text-cyan-400/80 mb-8 text-center">// tech stack</p>
+          <p className="font-mono2 text-xs text-cyan-400/80 mb-8 text-center">// Tech stack</p>
         </Reveal>
         <div className="relative overflow-hidden">
           <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-slate-950 to-transparent z-10" />
@@ -366,9 +366,9 @@ export default function Portfolio() {
       </section>
 
       {/* PROJECTS */}
-      <section id="projects" className="max-w-6xl mx-auto px-6 py-24">
+      <section id="Projects" className="max-w-6xl mx-auto px-6 py-24">
         <Reveal>
-          <p className="font-mono2 text-xs text-cyan-400/80 mb-3">// projects</p>
+          <p className="font-mono2 text-xs text-cyan-400/80 mb-3">// Projects</p>
           <h2 className="font-display text-3xl sm:text-4xl font-bold text-white mb-14">Things I've built</h2>
         </Reveal>
 
@@ -427,9 +427,9 @@ export default function Portfolio() {
       <Waveform />
 
       {/* CERTIFICATIONS */}
-      <section id="certifications" className="max-w-4xl mx-auto px-6 py-20">
+      <section id="Certifications" className="max-w-4xl mx-auto px-6 py-20">
         <Reveal>
-          <p className="font-mono2 text-xs text-cyan-400/80 mb-3">// certifications</p>
+          <p className="font-mono2 text-xs text-cyan-400/80 mb-3">// Certifications</p>
           <h2 className="font-display text-3xl sm:text-4xl font-bold text-white mb-10">Verified learning</h2>
         </Reveal>
         <div className="grid sm:grid-cols-2 gap-5">
@@ -459,9 +459,9 @@ export default function Portfolio() {
       </section>
 
       {/* CONTACT */}
-      <section id="contact" className="max-w-4xl mx-auto px-6 py-28 text-center">
+      <section id="Contact" className="max-w-4xl mx-auto px-6 py-28 text-center">
         <Reveal>
-          <p className="font-mono2 text-xs text-cyan-400/80 mb-3">// connect</p>
+          <p className="font-mono2 text-xs text-cyan-400/80 mb-3">// Connect</p>
           <h2 className="font-display text-3xl sm:text-5xl font-bold text-white">Let's build something.</h2>
           <p className="mt-4 text-slate-400 max-w-md mx-auto">
             Open to interesting project ideas, collaborations, or a good tech conversation.

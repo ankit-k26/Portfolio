@@ -27,11 +27,11 @@ const PROJECTS = [
     accent: "from-violet-500 to-fuchsia-500",
   },
   {
-    title: "Sign Language → Speech",
-    desc: "Real-time pipeline classifying hand gestures via webcam with an LSTM model, then speaking them as natural English sentences.",
-    tags: ["MediaPipe", "TensorFlow", "LangChain", "PyQt5"],
-    link: "https://github.com/ankit-k26?tab=repositories",
-    accent: "from-cyan-400 to-blue-500",
+    title: "SignSpeak — Real-Time Sign Language to Speech",
+    desc: "A full-stack system that translates live hand gestures into spoken sentences — an LSTM classifier over MediaPipe landmarks, a LangChain/Ollama agent for sentence generation, and a React frontend streaming webcam frames to a FastAPI backend over WebSockets.",
+    tags: ["FastAPI", "React", "TensorFlow", "MediaPipe", "LangChain", "Ollama"],
+    link: "https://github.com/ankit-k26/Real-Time-Sign-Language-to-Speech-System",
+    accent: "from-emerald-400 to-teal-500",
   },
   {
     title: "Stacks — Full-Stack RAG Chatbot",
@@ -298,7 +298,7 @@ export default function Portfolio() {
           </Reveal>
           <Reveal delay={400}>
             <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-              <a href="#projects" className="group inline-flex items-center gap-2 bg-cyan-400 text-slate-950 font-semibold px-6 py-3 rounded-full hover:bg-cyan-300 transition-all hover:-translate-y-0.5">
+              <a href="#Projects" className="group inline-flex items-center gap-2 bg-cyan-400 text-slate-950 font-semibold px-6 py-3 rounded-full hover:bg-cyan-300 transition-all hover:-translate-y-0.5">
                 View Projects <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </a>
               <a href="https://github.com/ankit-k26" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 border border-white/15 text-slate-200 px-6 py-3 rounded-full hover:border-cyan-400/50 hover:text-cyan-300 transition-colors">

@@ -203,57 +203,41 @@ export default function Portfolio() {
 
   return (
     <div className="bg-slate-950 text-slate-200 min-h-screen font-sans antialiased overflow-x-hidden" style={{ fontFamily: "'Inter', sans-serif" }}>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
-        .font-display { font-family: 'Sora', sans-serif; }
-        .font-mono2 { font-family: 'JetBrains Mono', monospace; }
-        .wave-svg { width: 100%; height: 100%; animation: waveShift 10s ease-in-out infinite alternate; }
-        @keyframes waveShift { 0% { transform: translateX(0) scaleY(1); } 100% { transform: translateX(-40px) scaleY(1.15); } }
-        @keyframes blobFloat { 0%,100% { transform: translate(0,0) scale(1); } 33% { transform: translate(20px,-30px) scale(1.08); } 66% { transform: translate(-25px,15px) scale(0.95); } }
-        .blob { animation: blobFloat 14s ease-in-out infinite; }
-        @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-        .marquee-track { animation: marquee 22s linear infinite; }
-        @keyframes fadeSlide { from { opacity:0; transform: translateY(14px);} to { opacity:1; transform: translateY(0);} }
-        .fade-slide { animation: fadeSlide 0.8s ease-out both; }
-        @media (prefers-reduced-motion: reduce) {
-          .blob, .wave-svg, .marquee-track { animation: none !important; }
-        }
-      `}</style>
-
       {/* NAV */}
       <nav className="fixed top-0 inset-x-0 z-50 backdrop-blur-md bg-slate-950/60 border-b border-white/5">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <span className="font-display font-bold text-lg tracking-tight text-white">Ankit<span className="text-cyan-400">.</span></span>
           <div className="hidden sm:flex items-center gap-8 text-sm text-slate-400 font-mono2">
-            <a href="#About" className="hover:text-cyan-300 transition-colors">About</a>
-            <a href="#Projects" className="hover:text-cyan-300 transition-colors">Projects</a>
-            <a href="#Stack" className="hover:text-cyan-300 transition-colors">Stack</a>
-            <a href="#Certifications" className="hover:text-cyan-300 transition-colors">Certifications</a>
-            <a href="#Contact" className="hover:text-cyan-300 transition-colors">Contact</a>
+            <a href="#About" className="hover:text-cyan-300 transition-colors focus-ring">About</a>
+            <a href="#Projects" className="hover:text-cyan-300 transition-colors focus-ring">Projects</a>
+            <a href="#Stack" className="hover:text-cyan-300 transition-colors focus-ring">Stack</a>
+            <a href="#Certifications" className="hover:text-cyan-300 transition-colors focus-ring">Certifications</a>
+            <a href="#Contact" className="hover:text-cyan-300 transition-colors focus-ring">Contact</a>
             <a
               href="/resume.pdf"
               download
-              className="inline-flex items-center gap-1.5 border border-cyan-400/30 text-cyan-300 rounded-full px-3.5 py-1.5 hover:bg-cyan-400/10 transition-colors"
+              className="inline-flex items-center gap-1.5 border border-cyan-400/30 text-cyan-300 rounded-full px-3.5 py-1.5 hover:bg-cyan-400/10 transition-colors focus-ring"
             >
               <Download className="w-3.5 h-3.5" /> Resume
             </a>
           </div>
           <button
             aria-label="Toggle menu"
+            aria-expanded={menuOpen}
             onClick={() => setMenuOpen((v) => !v)}
-            className="sm:hidden text-slate-300 hover:text-cyan-300 transition-colors"
+            className="sm:hidden text-slate-300 hover:text-cyan-300 transition-colors focus-ring min-h-[44px] min-w-[44px] flex items-center justify-center"
           >
             {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
         {menuOpen && (
           <div className="sm:hidden border-t border-white/5 bg-slate-950/95 px-6 py-4 flex flex-col gap-4 text-sm font-mono2 text-slate-300">
-            <a href="#About" onClick={() => setMenuOpen(false)} className="hover:text-cyan-300">About</a>
-            <a href="#Projects" onClick={() => setMenuOpen(false)} className="hover:text-cyan-300">Projects</a>
-            <a href="#Stack" onClick={() => setMenuOpen(false)} className="hover:text-cyan-300">Stack</a>
-            <a href="#Certifications" onClick={() => setMenuOpen(false)} className="hover:text-cyan-300">Certifications</a>
-            <a href="#Contact" onClick={() => setMenuOpen(false)} className="hover:text-cyan-300">Contact</a>
-            <a href="/resume.pdf" download className="inline-flex items-center gap-1.5 text-cyan-300 w-fit">
+            <a href="#About" onClick={() => setMenuOpen(false)} className="hover:text-cyan-300 min-h-[44px] flex items-center focus-ring">About</a>
+            <a href="#Projects" onClick={() => setMenuOpen(false)} className="hover:text-cyan-300 min-h-[44px] flex items-center focus-ring">Projects</a>
+            <a href="#Stack" onClick={() => setMenuOpen(false)} className="hover:text-cyan-300 min-h-[44px] flex items-center focus-ring">Stack</a>
+            <a href="#Certifications" onClick={() => setMenuOpen(false)} className="hover:text-cyan-300 min-h-[44px] flex items-center focus-ring">Certifications</a>
+            <a href="#Contact" onClick={() => setMenuOpen(false)} className="hover:text-cyan-300 min-h-[44px] flex items-center focus-ring">Contact</a>
+            <a href="/resume.pdf" download className="inline-flex items-center gap-1.5 text-cyan-300 w-fit min-h-[44px] focus-ring">
               <Download className="w-3.5 h-3.5" /> Download Resume
             </a>
           </div>
@@ -298,20 +282,20 @@ export default function Portfolio() {
           </Reveal>
           <Reveal delay={400}>
             <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-              <a href="#Projects" className="group inline-flex items-center gap-2 bg-cyan-400 text-slate-950 font-semibold px-6 py-3 rounded-full hover:bg-cyan-300 transition-all hover:-translate-y-0.5">
+              <a href="#Projects" className="group inline-flex items-center gap-2 bg-cyan-400 text-slate-950 font-semibold px-6 py-3 rounded-full hover:bg-cyan-300 transition-all hover:-translate-y-0.5 focus-ring">
                 View Projects <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </a>
-              <a href="https://github.com/ankit-k26" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 border border-white/15 text-slate-200 px-6 py-3 rounded-full hover:border-cyan-400/50 hover:text-cyan-300 transition-colors">
+              <a href="https://github.com/ankit-k26" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 border border-white/15 text-slate-200 px-6 py-3 rounded-full hover:border-cyan-400/50 hover:text-cyan-300 transition-colors focus-ring">
                 <Github className="w-4 h-4" /> GitHub
               </a>
-              <a href="/resume.pdf" download className="inline-flex items-center gap-2 border border-white/15 text-slate-200 px-6 py-3 rounded-full hover:border-cyan-400/50 hover:text-cyan-300 transition-colors">
+              <a href="/resume.pdf" download className="inline-flex items-center gap-2 border border-white/15 text-slate-200 px-6 py-3 rounded-full hover:border-cyan-400/50 hover:text-cyan-300 transition-colors focus-ring">
                 <Download className="w-4 h-4" /> Resume
               </a>
             </div>
           </Reveal>
         </div>
 
-        <a href="#About" aria-label="Scroll down" className="absolute bottom-8 left-1/2 -translate-x-1/2 text-slate-500 hover:text-cyan-300 transition-colors">
+        <a href="#About" aria-label="Scroll down" className="absolute bottom-8 left-1/2 -translate-x-1/2 text-slate-500 hover:text-cyan-300 transition-colors focus-ring min-h-[44px] min-w-[44px] flex items-center justify-center">
           <ArrowDown className="w-5 h-5 animate-bounce" />
         </a>
       </section>
@@ -376,7 +360,7 @@ export default function Portfolio() {
           {PROJECTS.map((p, i) => (
             <Reveal key={p.title} delay={i * 80}>
               <TiltCard className="h-full">
-                <div className="group h-full flex flex-col bg-white/[0.03] border border-white/10 rounded-2xl p-6 hover:border-white/20 transition-colors relative overflow-hidden">
+                <div className="group h-full flex flex-col bg-white/[0.03] border border-white/10 rounded-2xl p-6 hover:border-cyan-500/30 transition-colors relative overflow-hidden">
                   <div className={`absolute -top-10 -right-10 w-32 h-32 rounded-full bg-gradient-to-br ${p.accent} opacity-20 blur-2xl group-hover:opacity-35 transition-opacity`} />
                   <h3 className="font-display font-bold text-lg text-white relative z-10">{p.title}</h3>
                   <p className="mt-3 text-sm text-slate-400 leading-relaxed flex-1 relative z-10">{p.desc}</p>
@@ -389,7 +373,7 @@ export default function Portfolio() {
                     href={p.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-cyan-300 hover:text-cyan-200 relative z-10 w-fit"
+                    className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-cyan-300 hover:text-cyan-200 relative z-10 w-fit focus-ring min-h-[44px]"
                   >
                     View on GitHub <ExternalLink className="w-3.5 h-3.5" />
                   </a>
@@ -409,7 +393,7 @@ export default function Portfolio() {
                 href={p.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex items-center justify-between bg-white/[0.02] border border-white/10 rounded-xl px-5 py-4 hover:border-cyan-400/30 transition-colors"
+                className="group flex items-center justify-between bg-white/[0.02] border border-white/10 rounded-xl px-5 py-4 hover:border-cyan-400/30 transition-colors focus-ring"
               >
                 <div>
                   <p className="text-slate-200 font-medium text-sm">{p.title}</p>
@@ -439,7 +423,7 @@ export default function Portfolio() {
                 href={c.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex items-start gap-4 bg-white/[0.03] border border-white/10 rounded-2xl p-6 hover:border-cyan-400/30 transition-colors h-full"
+                className="group flex items-start gap-4 bg-white/[0.03] border border-white/10 rounded-2xl p-6 hover:border-cyan-400/30 transition-colors h-full focus-ring"
               >
                 <div className="mt-0.5 shrink-0 w-9 h-9 rounded-full bg-cyan-400/10 flex items-center justify-center">
                   <Award className="w-4.5 h-4.5 text-cyan-300" />
@@ -481,7 +465,7 @@ export default function Portfolio() {
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group inline-flex items-center gap-2 border border-white/10 rounded-full px-5 py-2.5 text-sm text-slate-300 hover:text-cyan-300 hover:border-cyan-400/40 transition-colors"
+                className="group inline-flex items-center gap-2 border border-white/10 rounded-full px-5 py-2.5 text-sm text-slate-300 hover:text-cyan-300 hover:border-cyan-400/40 transition-colors focus-ring min-h-[44px]"
               >
                 <Icon className="w-4 h-4" /> {label}
               </a>

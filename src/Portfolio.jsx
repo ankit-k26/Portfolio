@@ -466,14 +466,18 @@ function About() {
           <Reveal delay={180}>
             <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
               <p style={{ color: "var(--muted)", lineHeight: 1.75, fontSize: "1rem" }}>
-                I'm a self-driven developer working across full-stack web development and applied AI — most of my
-                projects run real-time inference over a webcam feed, or a local LLM through Ollama, with nothing
-                phoned home to a third-party API unless it needs to be.
+                I'm Ankit, an MCA graduate who builds at the intersection of full-stack development and applied AI.
+                I like taking a project from database schema to production-ready UI, and I'm just as comfortable
+                designing a REST API as I am wiring a retrieval-augmented generation pipeline into a working chatbot.
+                My recent work spans a full-stack RAG chatbot built solo with React, Express, and Qdrant, a real-time
+                computer vision system that turns hand gestures into speech, and an agentic voice assistant that
+                routes commands through LangChain's tool-calling.
               </p>
               <p style={{ color: "var(--muted)", lineHeight: 1.75, fontSize: "1rem" }}>
-                Currently building <span style={{ color: "var(--text)", fontWeight: 600 }}>AI SecureVault</span>, a desktop
-                security app pairing face recognition with AES encryption, and exploring RAG pipelines and local
-                AI tooling more broadly.
+                What ties these together is a preference for understanding why a piece of a system
+                works the way it does — not just that it runs. I'm currently sharpening my grasp of relational
+                databases and cloud deployment to round out the full picture, and I'm looking for a role where I
+                can keep building things that solve real problems.
               </p>
 
               {/* Stat chips */}

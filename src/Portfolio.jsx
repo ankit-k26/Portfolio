@@ -1,5 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Github, Linkedin, Instagram, Mail, ExternalLink, ArrowUpRight, ArrowDown, MessageCircle, Download, Menu, X, Award } from "lucide-react";
+import {
+  Github, Linkedin, Instagram, Mail, ExternalLink,
+  ArrowUpRight, ArrowDown, MessageCircle, Download, Menu, X, Award
+} from "lucide-react";
+
+/* ─────────────────────────── DATA (unchanged) ──────────────────────── */
 
 const CERTIFICATIONS = [
   {
@@ -24,42 +29,39 @@ const PROJECTS = [
     desc: "A production-grade desktop security app combining face-recognition auth with liveness detection and AES file encryption. Vault keys are session-bound and never touch disk.",
     tags: ["Python", "PyQt5", "face_recognition", "dlib", "SQLite"],
     link: "https://github.com/ankit-k26/SecureVault",
-    accent: "from-violet-500 to-fuchsia-500",
   },
   {
-    title: "SignSpeak — Real-Time Sign Language to Speech",
+    title: "SignSpeak",
+    subtitle: "Real-Time Sign Language to Speech",
     desc: "A full-stack system that translates live hand gestures into spoken sentences — an LSTM classifier over MediaPipe landmarks, a LangChain/Ollama agent for sentence generation, and a React frontend streaming webcam frames to a FastAPI backend over WebSockets.",
     tags: ["FastAPI", "React", "TensorFlow", "MediaPipe", "LangChain", "Ollama"],
     link: "https://github.com/ankit-k26/Real-Time-Sign-Language-to-Speech-System",
-    accent: "from-emerald-400 to-teal-500",
   },
   {
-    title: "Stacks — Full-Stack RAG Chatbot",
+    title: "Stacks",
+    subtitle: "Full-Stack RAG Chatbot",
     desc: "A full-stack retrieval-augmented generation chatbot built end-to-end solo, with a React/Vite frontend and an Express/Node.js backend. Ollama-hosted Gemma handles generation while Qwen3-Embedding powers semantic search over Qdrant-stored vectors.",
     tags: ["React", "Vite", "Express.js", "Node.js", "MongoDB", "Qdrant", "Ollama"],
     link: "https://github.com/ankit-k26?tab=repositories",
-    accent: "from-teal-300 to-cyan-500",
   },
   {
     title: "Hand Gesture Mouse Controller",
     desc: "Full mouse control via hand gestures over webcam — palm to move, pinch to click, peace sign to right-click. No extra hardware.",
     tags: ["MediaPipe", "TensorFlow", "PyAutoGUI"],
     link: "https://github.com/ankit-k26/HandGestureSystemControl",
-    accent: "from-amber-400 to-orange-500",
   },
   {
     title: "Face Recognition Security System",
     desc: "Real-time face-recognition access control using OpenCV's LBPH algorithm — live enrollment, confidence scoring, access logs.",
     tags: ["Python", "OpenCV", "Tkinter"],
     link: "https://github.com/ankit-k26/FaceRecognitionSystem",
-    accent: "from-rose-400 to-pink-500",
   },
   {
-    title: "VoiceFlow — AI Voice Assistant",
+    title: "VoiceFlow",
+    subtitle: "AI Voice Assistant",
     desc: "A local, on-device voice assistant with a tool-calling agent loop that dispatches real system actions, entirely offline.",
     tags: ["LangChain", "Ollama", "SpeechRecognition"],
     link: "https://github.com/ankit-k26/VoiceAssistant",
-    accent: "from-indigo-400 to-violet-500",
   },
 ];
 
@@ -69,11 +71,23 @@ const MINOR_PROJECTS = [
   { title: "Custom New Tab Page", tags: ["HTML", "CSS", "JS"], link: "https://github.com/ankit-k26?tab=repositories" },
 ];
 
-const STACK = [
-  "Python", "JavaScript", "C", "React.js", "Node.js", "Express.js",
-  "MongoDB", "OpenCV", "TensorFlow", "MediaPipe", "LangChain", "Ollama",
-  "PyQt5", "Git", "SQLite", "Tailwind CSS",
+const STACK_CATEGORIES = [
+  { label: "Languages",  items: ["Python", "JavaScript", "C"] },
+  { label: "Frontend",   items: ["React.js", "Vite", "Tailwind CSS"] },
+  { label: "Backend",    items: ["Node.js", "Express.js", "MongoDB", "SQLite"] },
+  { label: "AI / ML",    items: ["OpenCV", "TensorFlow", "MediaPipe", "LangChain", "Ollama"] },
+  { label: "Tools",      items: ["Git", "PyQt5", "FastAPI"] },
 ];
+
+const CONTACTS = [
+  { icon: Github,        label: "GitHub",    href: "https://github.com/ankit-k26" },
+  { icon: Linkedin,      label: "LinkedIn",  href: "https://www.linkedin.com/in/ankit-kumar-10o26/" },
+  { icon: Mail,          label: "Email",     href: "mailto:ankitmukesh2003@email.com" },
+  { icon: Instagram,     label: "Instagram", href: "https://www.instagram.com/_.ken_k_/" },
+  { icon: MessageCircle, label: "Discord",   href: "https://discord.gg/WBBYCyJbrb" },
+];
+
+/* ─────────────────────────── HOOKS ─────────────────────────────────── */
 
 function useReveal() {
   const ref = useRef(null);
@@ -83,7 +97,7 @@ function useReveal() {
     if (!el) return;
     const io = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) { setVisible(true); io.disconnect(); } },
-      { threshold: 0.15 }
+      { threshold: 0.12 }
     );
     io.observe(el);
     return () => io.disconnect();
@@ -91,42 +105,19 @@ function useReveal() {
   return [ref, visible];
 }
 
+/* ─────────────────────────── COMPONENTS ────────────────────────────── */
+
 function Reveal({ children, delay = 0, className = "" }) {
   const [ref, visible] = useReveal();
   return (
     <div
       ref={ref}
-      className={`transition-all duration-700 ease-out ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"} ${className}`}
-      style={{ transitionDelay: `${delay}ms` }}
-    >
-      {children}
-    </div>
-  );
-}
-
-function TiltCard({ children, className = "" }) {
-  const ref = useRef(null);
-  const [style, setStyle] = useState({});
-
-  const onMove = (e) => {
-    const el = ref.current;
-    if (!el) return;
-    const r = el.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width - 0.5;
-    const y = (e.clientY - r.top) / r.height - 0.5;
-    setStyle({
-      transform: `perspective(800px) rotateY(${x * 6}deg) rotateX(${-y * 6}deg) translateZ(0)`,
-    });
-  };
-  const onLeave = () => setStyle({ transform: "perspective(800px) rotateY(0deg) rotateX(0deg)" });
-
-  return (
-    <div
-      ref={ref}
-      onMouseMove={onMove}
-      onMouseLeave={onLeave}
-      style={{ ...style, transition: "transform 0.15s ease-out" }}
       className={className}
+      style={{
+        transition: `opacity 0.65s ease-out ${delay}ms, transform 0.65s ease-out ${delay}ms`,
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(22px)",
+      }}
     >
       {children}
     </div>
@@ -136,7 +127,7 @@ function TiltCard({ children, className = "" }) {
 function RoleRotator() {
   const [idx, setIdx] = useState(0);
   const [display, setDisplay] = useState("");
-  const [phase, setPhase] = useState("typing"); // typing | pausing | deleting
+  const [phase, setPhase] = useState("typing");
 
   useEffect(() => {
     const current = ROLES[idx];
@@ -145,13 +136,13 @@ function RoleRotator() {
       if (display.length < current.length) {
         t = setTimeout(() => setDisplay(current.slice(0, display.length + 1)), 45);
       } else {
-        t = setTimeout(() => setPhase("pausing"), 1300);
+        t = setTimeout(() => setPhase("pausing"), 1400);
       }
     } else if (phase === "pausing") {
       t = setTimeout(() => setPhase("deleting"), 200);
     } else if (phase === "deleting") {
       if (display.length > 0) {
-        t = setTimeout(() => setDisplay(display.slice(0, -1)), 25);
+        t = setTimeout(() => setDisplay(display.slice(0, -1)), 22);
       } else {
         setIdx((idx + 1) % ROLES.length);
         setPhase("typing");
@@ -161,322 +152,808 @@ function RoleRotator() {
   }, [display, phase, idx]);
 
   return (
-    <span className="text-cyan-300">
+    <span style={{ color: "var(--accent)", fontFamily: "'JetBrains Mono', monospace", fontSize: "0.95rem" }}>
       {display}
-      <span className="inline-block w-[2px] h-[1em] bg-cyan-300 ml-1 align-middle animate-pulse" />
+      <span className="cursor-blink" style={{ display: "inline-block", width: "2px", height: "1em", background: "var(--accent)", marginLeft: "3px", verticalAlign: "middle" }} />
     </span>
   );
 }
 
-function Waveform() {
-  // A gentle animated sine-wave divider — nods to the voice-assistant / signal-processing work.
-  return (
-    <div className="relative w-full h-16 overflow-hidden opacity-70">
-      <svg className="wave-svg" viewBox="0 0 1200 100" preserveAspectRatio="none">
-        <path
-          d="M0,50 C150,10 350,90 600,50 C850,10 1050,90 1200,50 L1200,100 L0,100 Z"
-          fill="url(#waveGrad)"
-        />
-        <defs>
-          <linearGradient id="waveGrad" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="#22d3ee" stopOpacity="0.15" />
-            <stop offset="50%" stopColor="#a78bfa" stopOpacity="0.25" />
-            <stop offset="100%" stopColor="#22d3ee" stopOpacity="0.15" />
-          </linearGradient>
-        </defs>
-      </svg>
-    </div>
-  );
+/* Thin horizontal ruled divider */
+function Rule({ className = "" }) {
+  return <div className={`ruled ${className}`} />;
 }
 
-export default function Portfolio() {
-  const [mouse, setMouse] = useState({ x: 0.5, y: 0.3 });
-  const [menuOpen, setMenuOpen] = useState(false);
-  const heroRef = useRef(null);
+/* ─────────────────────────── NAV ────────────────────────────────────── */
 
-  const onHeroMove = useCallback((e) => {
-    const el = heroRef.current;
-    if (!el) return;
-    const r = el.getBoundingClientRect();
-    setMouse({ x: (e.clientX - r.left) / r.width, y: (e.clientY - r.top) / r.height });
+function Nav({ menuOpen, setMenuOpen }) {
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const navLinks = ["About", "Projects", "Stack", "Certifications", "Contact"];
+
   return (
-    <div className="bg-slate-950 text-slate-200 min-h-screen font-sans antialiased overflow-x-hidden" style={{ fontFamily: "'Inter', sans-serif" }}>
-      {/* NAV */}
-      <nav className="fixed top-0 inset-x-0 z-50 backdrop-blur-md bg-slate-950/60 border-b border-white/5">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <span className="font-display font-bold text-lg tracking-tight text-white">Ankit<span className="text-cyan-400">.</span></span>
-          <div className="hidden sm:flex items-center gap-8 text-sm text-slate-400 font-mono2">
-            <a href="#About" className="hover:text-cyan-300 transition-colors focus-ring">About</a>
-            <a href="#Projects" className="hover:text-cyan-300 transition-colors focus-ring">Projects</a>
-            <a href="#Stack" className="hover:text-cyan-300 transition-colors focus-ring">Stack</a>
-            <a href="#Certifications" className="hover:text-cyan-300 transition-colors focus-ring">Certifications</a>
-            <a href="#Contact" className="hover:text-cyan-300 transition-colors focus-ring">Contact</a>
+    <nav
+      style={{
+        position: "fixed", top: 0, left: 0, right: 0, zIndex: 50,
+        borderBottom: scrolled ? "1px solid var(--border)" : "1px solid transparent",
+        background: scrolled ? "rgba(10,10,15,0.85)" : "transparent",
+        backdropFilter: scrolled ? "blur(16px)" : "none",
+        transition: "background 0.3s, border-color 0.3s, backdrop-filter 0.3s",
+      }}
+    >
+      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 1.5rem" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: "64px" }}>
+          {/* Monogram logo */}
+          <a href="#" className="focus-ring" aria-label="Home" style={{ display: "flex", alignItems: "center", gap: "0.5rem", textDecoration: "none" }}>
+            <span
+              style={{
+                display: "inline-flex", alignItems: "center", justifyContent: "center",
+                width: "34px", height: "34px",
+                background: "var(--accent)",
+                borderRadius: "6px",
+                fontFamily: "'Cabinet Grotesk', sans-serif",
+                fontWeight: 900, fontSize: "0.9rem",
+                color: "#000", letterSpacing: "-0.03em",
+                userSelect: "none",
+              }}
+            >
+              AK
+            </span>
+            <span style={{ fontFamily: "'Cabinet Grotesk', sans-serif", fontWeight: 700, fontSize: "1rem", color: "var(--text)", letterSpacing: "-0.02em" }}>
+              Ankit Kumar
+            </span>
+          </a>
+
+          {/* Desktop links */}
+          <div className="hidden sm:flex" style={{ alignItems: "center", gap: "2rem" }}>
+            {navLinks.map((link) => (
+              <a
+                key={link}
+                href={`#${link}`}
+                className="focus-ring hover-line"
+                style={{
+                  fontFamily: "'JetBrains Mono', monospace",
+                  fontSize: "0.75rem", color: "var(--muted)",
+                  textDecoration: "none",
+                  transition: "color 0.2s",
+                  paddingBottom: "2px",
+                }}
+                onMouseEnter={e => e.target.style.color = "var(--text)"}
+                onMouseLeave={e => e.target.style.color = "var(--muted)"}
+              >
+                {link}
+              </a>
+            ))}
             <a
               href="/resume.pdf"
               download
-              className="inline-flex items-center gap-1.5 border border-cyan-400/30 text-cyan-300 rounded-full px-3.5 py-1.5 hover:bg-cyan-400/10 transition-colors focus-ring"
+              className="focus-ring"
+              style={{
+                display: "inline-flex", alignItems: "center", gap: "0.4rem",
+                background: "var(--accent)", color: "#000",
+                fontFamily: "'Cabinet Grotesk', sans-serif",
+                fontWeight: 700, fontSize: "0.8rem",
+                padding: "0.45rem 1rem", borderRadius: "9999px",
+                textDecoration: "none",
+                transition: "background 0.2s, transform 0.15s",
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = "#d4ff5a"; e.currentTarget.style.transform = "translateY(-1px)"; }}
+              onMouseLeave={e => { e.currentTarget.style.background = "var(--accent)"; e.currentTarget.style.transform = "translateY(0)"; }}
             >
-              <Download className="w-3.5 h-3.5" /> Resume
+              <Download size={12} /> Resume
             </a>
           </div>
+
+          {/* Mobile hamburger */}
           <button
             aria-label="Toggle menu"
             aria-expanded={menuOpen}
-            onClick={() => setMenuOpen((v) => !v)}
-            className="sm:hidden text-slate-300 hover:text-cyan-300 transition-colors focus-ring min-h-[44px] min-w-[44px] flex items-center justify-center"
+            onClick={() => setMenuOpen(v => !v)}
+            className="sm:hidden focus-ring"
+            style={{
+              background: "none", border: "none", cursor: "pointer",
+              color: "var(--muted)", minWidth: "44px", minHeight: "44px",
+              display: "flex", alignItems: "center", justifyContent: "center",
+            }}
+            onMouseEnter={e => e.currentTarget.style.color = "var(--accent)"}
+            onMouseLeave={e => e.currentTarget.style.color = "var(--muted)"}
           >
-            {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {menuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
-        {menuOpen && (
-          <div className="sm:hidden border-t border-white/5 bg-slate-950/95 px-6 py-4 flex flex-col gap-4 text-sm font-mono2 text-slate-300">
-            <a href="#About" onClick={() => setMenuOpen(false)} className="hover:text-cyan-300 min-h-[44px] flex items-center focus-ring">About</a>
-            <a href="#Projects" onClick={() => setMenuOpen(false)} className="hover:text-cyan-300 min-h-[44px] flex items-center focus-ring">Projects</a>
-            <a href="#Stack" onClick={() => setMenuOpen(false)} className="hover:text-cyan-300 min-h-[44px] flex items-center focus-ring">Stack</a>
-            <a href="#Certifications" onClick={() => setMenuOpen(false)} className="hover:text-cyan-300 min-h-[44px] flex items-center focus-ring">Certifications</a>
-            <a href="#Contact" onClick={() => setMenuOpen(false)} className="hover:text-cyan-300 min-h-[44px] flex items-center focus-ring">Contact</a>
-            <a href="/resume.pdf" download className="inline-flex items-center gap-1.5 text-cyan-300 w-fit min-h-[44px] focus-ring">
-              <Download className="w-3.5 h-3.5" /> Download Resume
+      </div>
+
+      {/* Mobile drawer */}
+      {menuOpen && (
+        <div style={{
+          background: "rgba(10,10,15,0.97)", backdropFilter: "blur(20px)",
+          borderTop: "1px solid var(--border)",
+          padding: "1.25rem 1.5rem 1.75rem",
+          display: "flex", flexDirection: "column", gap: "0.25rem",
+        }}>
+          {navLinks.map((link) => (
+            <a
+              key={link}
+              href={`#${link}`}
+              onClick={() => setMenuOpen(false)}
+              className="focus-ring"
+              style={{
+                fontFamily: "'Cabinet Grotesk', sans-serif", fontWeight: 600,
+                fontSize: "1.15rem", color: "var(--text)", textDecoration: "none",
+                minHeight: "44px", display: "flex", alignItems: "center",
+                borderBottom: "1px solid var(--border)", paddingBottom: "0.75rem",
+                transition: "color 0.2s",
+              }}
+              onMouseEnter={e => e.target.style.color = "var(--accent)"}
+              onMouseLeave={e => e.target.style.color = "var(--text)"}
+            >
+              {link}
+            </a>
+          ))}
+          <a
+            href="/resume.pdf"
+            download
+            style={{
+              display: "inline-flex", alignItems: "center", gap: "0.5rem",
+              background: "var(--accent)", color: "#000",
+              fontFamily: "'Cabinet Grotesk', sans-serif", fontWeight: 700,
+              fontSize: "0.9rem", padding: "0.6rem 1.25rem",
+              borderRadius: "9999px", textDecoration: "none",
+              marginTop: "0.75rem", width: "fit-content",
+            }}
+          >
+            <Download size={14} /> Download Resume
+          </a>
+        </div>
+      )}
+    </nav>
+  );
+}
+
+/* ─────────────────────────── HERO ───────────────────────────────────── */
+
+function Hero() {
+  return (
+    <section
+      style={{
+        minHeight: "100vh", display: "flex", alignItems: "flex-end",
+        padding: "0 1.5rem 5rem", position: "relative", overflow: "hidden",
+      }}
+    >
+      {/* Vertical accent line */}
+      <div style={{
+        position: "absolute", left: "1.5rem", top: "30%", bottom: "20%",
+        width: "1px", background: "linear-gradient(to bottom, transparent, var(--accent), transparent)",
+        opacity: 0.35,
+      }} />
+
+      {/* Scanline sweep effect */}
+      <div
+        className="scanline"
+        style={{
+          position: "absolute", left: 0, right: 0, height: "1px",
+          background: "linear-gradient(to right, transparent, var(--accent), transparent)",
+          opacity: 0,
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* Large background year — decorative */}
+      <div
+        className="font-display float-y"
+        style={{
+          position: "absolute", right: "-2rem", bottom: "-1rem",
+          fontSize: "clamp(8rem, 25vw, 18rem)",
+          fontWeight: 900, color: "transparent",
+          WebkitTextStroke: "1px rgba(186,255,41,0.07)",
+          userSelect: "none", pointerEvents: "none",
+          lineHeight: 1, letterSpacing: "-0.04em",
+        }}
+      >
+        2026
+      </div>
+
+      <div style={{ maxWidth: "1200px", width: "100%", margin: "0 auto", paddingTop: "80px" }}>
+        {/* Status badge */}
+        <Reveal>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", marginBottom: "2rem" }}>
+            <span style={{
+              display: "inline-block", width: "7px", height: "7px",
+              borderRadius: "50%", background: "var(--accent)",
+              boxShadow: "0 0 8px var(--accent)",
+              animation: "blink 2s step-end infinite",
+            }} />
+            <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.7rem", color: "var(--muted)", letterSpacing: "0.08em" }}>
+              OPEN TO FULL-STACK &amp; AI/ML ROLES
+            </span>
+          </div>
+        </Reveal>
+
+        {/* Name — large editorial display */}
+        <Reveal delay={80}>
+          <h1
+            className="font-display"
+            style={{
+              fontSize: "clamp(3.5rem, 12vw, 9rem)",
+              fontWeight: 900,
+              lineHeight: 0.9,
+              letterSpacing: "-0.04em",
+              color: "var(--text)",
+              margin: "0 0 0.5rem",
+            }}
+          >
+            Ankit<br />
+            <span style={{ color: "var(--accent)" }}>Kumar</span>
+          </h1>
+        </Reveal>
+
+        {/* Role rotator line */}
+        <Reveal delay={160}>
+          <div style={{ marginBottom: "2rem" }}>
+            <RoleRotator />
+          </div>
+        </Reveal>
+
+        {/* Tagline */}
+        <Reveal delay={220}>
+          <p style={{
+            maxWidth: "520px", color: "var(--muted)", lineHeight: 1.7,
+            fontSize: "1rem", marginBottom: "2.5rem",
+          }}>
+            I build things at the intersection of AI, computer vision, and thoughtful software —
+            face-authenticated vaults, gesture-controlled interfaces, and local LLM tooling that actually ships.
+          </p>
+        </Reveal>
+
+        {/* CTAs */}
+        <Reveal delay={280}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem", alignItems: "center" }}>
+            <a
+              href="#Projects"
+              className="focus-ring"
+              style={{
+                display: "inline-flex", alignItems: "center", gap: "0.45rem",
+                background: "var(--accent)", color: "#000",
+                fontFamily: "'Cabinet Grotesk', sans-serif", fontWeight: 700,
+                fontSize: "0.9rem", padding: "0.7rem 1.5rem", borderRadius: "9999px",
+                textDecoration: "none", transition: "background 0.2s, transform 0.15s",
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = "#d4ff5a"; e.currentTarget.style.transform = "translateY(-2px)"; }}
+              onMouseLeave={e => { e.currentTarget.style.background = "var(--accent)"; e.currentTarget.style.transform = "translateY(0)"; }}
+            >
+              View Projects <ArrowUpRight size={15} />
+            </a>
+            <a
+              href="https://github.com/ankit-k26"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="focus-ring"
+              style={{
+                display: "inline-flex", alignItems: "center", gap: "0.45rem",
+                border: "1px solid var(--border)", color: "var(--text)",
+                fontFamily: "'Cabinet Grotesk', sans-serif", fontWeight: 600,
+                fontSize: "0.9rem", padding: "0.7rem 1.5rem", borderRadius: "9999px",
+                textDecoration: "none", transition: "border-color 0.2s, color 0.2s, transform 0.15s",
+              }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--accent)"; e.currentTarget.style.color = "var(--accent)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.color = "var(--text)"; e.currentTarget.style.transform = "translateY(0)"; }}
+            >
+              <Github size={15} /> GitHub
+            </a>
+            <a
+              href="/resume.pdf"
+              download
+              className="focus-ring"
+              style={{
+                display: "inline-flex", alignItems: "center", gap: "0.45rem",
+                border: "1px solid var(--border)", color: "var(--text)",
+                fontFamily: "'Cabinet Grotesk', sans-serif", fontWeight: 600,
+                fontSize: "0.9rem", padding: "0.7rem 1.5rem", borderRadius: "9999px",
+                textDecoration: "none", transition: "border-color 0.2s, color 0.2s, transform 0.15s",
+              }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--accent)"; e.currentTarget.style.color = "var(--accent)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.color = "var(--text)"; e.currentTarget.style.transform = "translateY(0)"; }}
+            >
+              <Download size={15} /> Resume
             </a>
           </div>
-        )}
-      </nav>
-
-      {/* HERO */}
-      <section
-        ref={heroRef}
-        onMouseMove={onHeroMove}
-        className="relative min-h-screen flex items-center justify-center px-6 pt-20 overflow-hidden"
-      >
-        {/* Signal field: cursor-reactive gradient blobs */}
-        <div
-          className="pointer-events-none absolute w-[36rem] h-[36rem] rounded-full bg-cyan-500/20 blur-3xl blob"
-          style={{ left: `calc(${mouse.x * 100}% - 18rem)`, top: `calc(${mouse.y * 100}% - 18rem)`, transition: "left 0.4s ease-out, top 0.4s ease-out" }}
-        />
-        <div className="pointer-events-none absolute w-[28rem] h-[28rem] rounded-full bg-violet-500/20 blur-3xl blob top-1/3 right-0" style={{ animationDelay: "2s" }} />
-        <div className="pointer-events-none absolute w-[24rem] h-[24rem] rounded-full bg-fuchsia-500/10 blur-3xl blob bottom-0 left-10" style={{ animationDelay: "4s" }} />
-
-        <div className="relative z-10 max-w-4xl text-center">
-          <Reveal>
-            <span className="inline-flex items-center gap-2 font-mono2 text-xs text-cyan-300/80 border border-cyan-400/20 bg-cyan-400/5 rounded-full px-4 py-1.5 mb-8">
-              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" /> Open to full-stack &amp; AI/ML roles
-            </span>
-          </Reveal>
-          <Reveal delay={100}>
-            <h1 className="font-display font-extrabold text-5xl sm:text-7xl text-white tracking-tight leading-[1.05]">
-              Ankit Kumar
-            </h1>
-          </Reveal>
-          <Reveal delay={200}>
-            <p className="mt-5 font-mono2 text-lg sm:text-2xl text-slate-300 h-8">
-              <RoleRotator />
-            </p>
-          </Reveal>
-          <Reveal delay={300}>
-            <p className="mt-6 text-slate-400 max-w-xl mx-auto leading-relaxed">
-              I build things at the intersection of AI, computer vision, and thoughtful software —
-              face-authenticated vaults, gesture-controlled interfaces, and local LLM tooling that actually ships.
-            </p>
-          </Reveal>
-          <Reveal delay={400}>
-            <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-              <a href="#Projects" className="group inline-flex items-center gap-2 bg-cyan-400 text-slate-950 font-semibold px-6 py-3 rounded-full hover:bg-cyan-300 transition-all hover:-translate-y-0.5 focus-ring">
-                View Projects <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-              </a>
-              <a href="https://github.com/ankit-k26" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 border border-white/15 text-slate-200 px-6 py-3 rounded-full hover:border-cyan-400/50 hover:text-cyan-300 transition-colors focus-ring">
-                <Github className="w-4 h-4" /> GitHub
-              </a>
-              <a href="/resume.pdf" download className="inline-flex items-center gap-2 border border-white/15 text-slate-200 px-6 py-3 rounded-full hover:border-cyan-400/50 hover:text-cyan-300 transition-colors focus-ring">
-                <Download className="w-4 h-4" /> Resume
-              </a>
-            </div>
-          </Reveal>
-        </div>
-
-        <a href="#About" aria-label="Scroll down" className="absolute bottom-8 left-1/2 -translate-x-1/2 text-slate-500 hover:text-cyan-300 transition-colors focus-ring min-h-[44px] min-w-[44px] flex items-center justify-center">
-          <ArrowDown className="w-5 h-5 animate-bounce" />
-        </a>
-      </section>
-
-      <Waveform />
-
-      {/* ABOUT */}
-      <section id="About" className="max-w-5xl mx-auto px-6 py-24">
-        <Reveal>
-          <p className="font-mono2 text-xs text-cyan-400/80 mb-3">// About</p>
         </Reveal>
-        <div className="grid md:grid-cols-2 gap-12 items-start">
+
+        {/* Scroll cue */}
+        <Reveal delay={400}>
+          <a
+            href="#About"
+            aria-label="Scroll down"
+            className="focus-ring"
+            style={{
+              display: "inline-flex", alignItems: "center", gap: "0.5rem",
+              marginTop: "4rem", color: "var(--muted)", textDecoration: "none",
+              fontFamily: "'JetBrains Mono', monospace", fontSize: "0.7rem",
+              letterSpacing: "0.08em", transition: "color 0.2s",
+            }}
+            onMouseEnter={e => e.currentTarget.style.color = "var(--accent)"}
+            onMouseLeave={e => e.currentTarget.style.color = "var(--muted)"}
+          >
+            <ArrowDown size={14} style={{ animation: "floatY 2s ease-in-out infinite" }} />
+            SCROLL
+          </a>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────────── ABOUT ──────────────────────────────────── */
+
+function About() {
+  return (
+    <section id="About" style={{ maxWidth: "1200px", margin: "0 auto", padding: "6rem 1.5rem" }}>
+      <Rule />
+      <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "3rem", marginTop: "3rem" }}>
+        {/* Label */}
+        <Reveal>
+          <span className="font-mono2" style={{ fontSize: "0.7rem", color: "var(--muted)", letterSpacing: "0.1em" }}>
+            001 / ABOUT
+          </span>
+        </Reveal>
+
+        <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "3rem" }} className="md-grid-2">
+          {/* Pull quote */}
           <Reveal delay={100}>
-            <h2 className="font-display text-3xl sm:text-4xl font-bold text-white leading-tight">
-              I build to learn,<br /> and ship to grow.
-            </h2>
+            <blockquote
+              className="font-display"
+              style={{
+                fontSize: "clamp(2rem, 5vw, 3.25rem)",
+                fontWeight: 800, lineHeight: 1.05,
+                letterSpacing: "-0.03em",
+                color: "var(--text)", margin: 0,
+                borderLeft: "none",
+              }}
+            >
+              I build to learn,<br />
+              <span style={{ color: "var(--accent)" }}>and ship</span><br />
+              to grow.
+            </blockquote>
           </Reveal>
-          <Reveal delay={200}>
-            <div className="space-y-4 text-slate-400 leading-relaxed">
-              <p>
+
+          {/* Body text + stats */}
+          <Reveal delay={180}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+              <p style={{ color: "var(--muted)", lineHeight: 1.75, fontSize: "1rem" }}>
                 I'm a self-driven developer working across full-stack web development and applied AI — most of my
                 projects run real-time inference over a webcam feed, or a local LLM through Ollama, with nothing
                 phoned home to a third-party API unless it needs to be.
               </p>
-              <p>
-                Currently building <span className="text-slate-200 font-medium">AI SecureVault</span>, a desktop
+              <p style={{ color: "var(--muted)", lineHeight: 1.75, fontSize: "1rem" }}>
+                Currently building <span style={{ color: "var(--text)", fontWeight: 600 }}>AI SecureVault</span>, a desktop
                 security app pairing face recognition with AES encryption, and exploring RAG pipelines and local
                 AI tooling more broadly.
               </p>
-              <p className="font-mono2 text-sm text-cyan-300/90 pt-2">"The only way to learn is to build."</p>
+
+              {/* Stat chips */}
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginTop: "0.5rem" }}>
+                {["6 Projects shipped", "Local-first AI", "Full-stack + CV", "Open to hire"].map(s => (
+                  <span key={s} style={{
+                    fontFamily: "'JetBrains Mono', monospace", fontSize: "0.68rem",
+                    color: "var(--text)", background: "var(--surface-2)",
+                    border: "1px solid var(--border)", borderRadius: "9999px",
+                    padding: "0.3rem 0.8rem",
+                  }}>
+                    {s}
+                  </span>
+                ))}
+              </div>
+
+              {/* Currently line */}
+              <div style={{ marginTop: "0.75rem", display: "flex", alignItems: "flex-start", gap: "0.5rem" }}>
+                <span className="font-mono2" style={{ fontSize: "0.7rem", color: "var(--muted)", paddingTop: "2px", whiteSpace: "nowrap" }}>currently →</span>
+                <RoleRotator />
+              </div>
             </div>
           </Reveal>
         </div>
-      </section>
+      </div>
+    </section>
+  );
+}
 
-      {/* STACK — marquee */}
-      <section id="Stack" className="py-16 border-y border-white/5 bg-white/[0.02]">
+/* ─────────────────────────── STACK ──────────────────────────────────── */
+
+function Stack() {
+  return (
+    <section id="Stack" style={{ background: "var(--surface)", padding: "5rem 0" }}>
+      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 1.5rem" }}>
+        <Rule />
         <Reveal>
-          <p className="font-mono2 text-xs text-cyan-400/80 mb-8 text-center">// Tech stack</p>
+          <span className="font-mono2" style={{ fontSize: "0.7rem", color: "var(--muted)", letterSpacing: "0.1em", display: "block", marginTop: "2rem", marginBottom: "2.5rem" }}>
+            002 / TECH STACK
+          </span>
         </Reveal>
-        <div className="relative overflow-hidden">
-          <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-slate-950 to-transparent z-10" />
-          <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-slate-950 to-transparent z-10" />
-          <div className="flex w-max marquee-track">
-            {[...STACK, ...STACK].map((s, i) => (
-              <span key={i} className="mx-4 font-mono2 text-sm text-slate-400 border border-white/10 rounded-full px-5 py-2 whitespace-nowrap">
-                {s}
-              </span>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "2rem" }}>
+          {STACK_CATEGORIES.map((cat, i) => (
+            <Reveal key={cat.label} delay={i * 60}>
+              <div>
+                <p className="font-mono2" style={{ fontSize: "0.65rem", color: "var(--accent)", letterSpacing: "0.1em", marginBottom: "0.75rem", fontWeight: 500 }}>
+                  {cat.label.toUpperCase()}
+                </p>
+                <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem" }}>
+                  {cat.items.map(item => (
+                    <span key={item} style={{
+                      fontFamily: "'Cabinet Grotesk', sans-serif", fontWeight: 600,
+                      fontSize: "0.95rem", color: "var(--text)",
+                    }}>
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+
+        {/* Scrolling marquee strip below */}
+        <div style={{ marginTop: "4rem", overflow: "hidden", position: "relative" }}>
+          <div style={{ position: "absolute", inset: 0, left: 0, width: "6rem", background: "linear-gradient(to right, var(--surface), transparent)", zIndex: 1, pointerEvents: "none" }} />
+          <div style={{ position: "absolute", inset: 0, right: 0, left: "auto", width: "6rem", background: "linear-gradient(to left, var(--surface), transparent)", zIndex: 1, pointerEvents: "none" }} />
+          <div className="marquee-track" style={{ display: "flex", width: "max-content" }}>
+            {[...STACK_CATEGORIES.flatMap(c => c.items), ...STACK_CATEGORIES.flatMap(c => c.items)].map((s, i) => (
+              <span key={i} className="tag" style={{ margin: "0 0.5rem" }}>{s}</span>
             ))}
           </div>
         </div>
-      </section>
+      </div>
+    </section>
+  );
+}
 
-      {/* PROJECTS */}
-      <section id="Projects" className="max-w-6xl mx-auto px-6 py-24">
-        <Reveal>
-          <p className="font-mono2 text-xs text-cyan-400/80 mb-3">// Projects</p>
-          <h2 className="font-display text-3xl sm:text-4xl font-bold text-white mb-14">Things I've built</h2>
-        </Reveal>
+/* ─────────────────────────── PROJECTS ──────────────────────────────── */
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {PROJECTS.map((p, i) => (
-            <Reveal key={p.title} delay={i * 80}>
-              <TiltCard className="h-full">
-                <div className="group h-full flex flex-col bg-white/[0.03] border border-white/10 rounded-2xl p-6 hover:border-cyan-500/30 transition-colors relative overflow-hidden">
-                  <div className={`absolute -top-10 -right-10 w-32 h-32 rounded-full bg-gradient-to-br ${p.accent} opacity-20 blur-2xl group-hover:opacity-35 transition-opacity`} />
-                  <h3 className="font-display font-bold text-lg text-white relative z-10">{p.title}</h3>
-                  <p className="mt-3 text-sm text-slate-400 leading-relaxed flex-1 relative z-10">{p.desc}</p>
-                  <div className="mt-4 flex flex-wrap gap-2 relative z-10">
-                    {p.tags.map((t) => (
-                      <span key={t} className="font-mono2 text-[11px] text-slate-400 border border-white/10 rounded-full px-2.5 py-1">{t}</span>
-                    ))}
-                  </div>
-                  <a
-                    href={p.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-cyan-300 hover:text-cyan-200 relative z-10 w-fit focus-ring min-h-[44px]"
-                  >
-                    View on GitHub <ExternalLink className="w-3.5 h-3.5" />
-                  </a>
+function Projects() {
+  return (
+    <section id="Projects" style={{ maxWidth: "1200px", margin: "0 auto", padding: "6rem 1.5rem" }}>
+      <Rule />
+      <Reveal>
+        <span className="font-mono2" style={{ fontSize: "0.7rem", color: "var(--muted)", letterSpacing: "0.1em", display: "block", marginTop: "2rem" }}>
+          003 / PROJECTS
+        </span>
+      </Reveal>
+      <Reveal delay={80}>
+        <h2 className="font-display" style={{
+          fontSize: "clamp(2rem, 5vw, 3.5rem)", fontWeight: 900,
+          letterSpacing: "-0.03em", color: "var(--text)", margin: "0.5rem 0 3rem",
+        }}>
+          Things I've built
+        </h2>
+      </Reveal>
+
+      {/* Main project list */}
+      <div>
+        {PROJECTS.map((p, i) => (
+          <Reveal key={p.title} delay={i * 60}>
+            <a
+              href={p.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="project-row focus-ring"
+              style={{
+                display: "grid",
+                gridTemplateColumns: "auto 1fr auto",
+                gap: "1.5rem 2rem",
+                alignItems: "start",
+                padding: "1.75rem 0",
+                borderBottom: "1px solid var(--border)",
+                textDecoration: "none",
+                transition: "background 0.2s",
+                borderRadius: "4px",
+                cursor: "pointer",
+              }}
+              onMouseEnter={e => e.currentTarget.style.background = "rgba(186,255,41,0.03)"}
+              onMouseLeave={e => e.currentTarget.style.background = "transparent"}
+            >
+              {/* Number */}
+              <span className="project-num" style={{ minWidth: "3.5rem" }}>
+                {String(i + 1).padStart(2, "0")}
+              </span>
+
+              {/* Content */}
+              <div>
+                <div style={{ display: "flex", alignItems: "baseline", flexWrap: "wrap", gap: "0.5rem", marginBottom: "0.5rem" }}>
+                  <h3 className="font-display" style={{
+                    fontSize: "1.25rem", fontWeight: 800, color: "var(--text)",
+                    letterSpacing: "-0.02em", margin: 0,
+                    transition: "color 0.2s",
+                  }}>
+                    {p.title}
+                  </h3>
+                  {p.subtitle && (
+                    <span style={{ color: "var(--muted)", fontSize: "0.85rem", fontWeight: 400 }}>
+                      — {p.subtitle}
+                    </span>
+                  )}
                 </div>
-              </TiltCard>
-            </Reveal>
-          ))}
-        </div>
+                <p style={{ color: "var(--muted)", fontSize: "0.88rem", lineHeight: 1.65, marginBottom: "0.75rem", maxWidth: "600px" }}>
+                  {p.desc}
+                </p>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
+                  {p.tags.map(t => <span key={t} className="tag">{t}</span>)}
+                </div>
+              </div>
 
-        <Reveal delay={200}>
-          <h3 className="font-display font-semibold text-white mt-16 mb-6">A few smaller builds</h3>
-        </Reveal>
-        <div className="grid sm:grid-cols-3 gap-5">
-          {MINOR_PROJECTS.map((p, i) => (
-            <Reveal key={p.title} delay={i * 80}>
-              <a
-                href={p.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center justify-between bg-white/[0.02] border border-white/10 rounded-xl px-5 py-4 hover:border-cyan-400/30 transition-colors focus-ring"
+              {/* Arrow */}
+              <div style={{
+                display: "flex", alignItems: "center", justifyContent: "center",
+                width: "40px", height: "40px", border: "1px solid var(--border)",
+                borderRadius: "50%", color: "var(--muted)",
+                transition: "border-color 0.2s, color 0.2s, transform 0.2s",
+                flexShrink: 0, marginTop: "4px",
+              }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--accent)"; e.currentTarget.style.color = "var(--accent)"; e.currentTarget.style.transform = "rotate(45deg)"; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.color = "var(--muted)"; e.currentTarget.style.transform = "rotate(0deg)"; }}
               >
-                <div>
-                  <p className="text-slate-200 font-medium text-sm">{p.title}</p>
-                  <div className="mt-1.5 flex gap-1.5">
-                    {p.tags.map((t) => <span key={t} className="font-mono2 text-[10px] text-slate-500">{t}</span>)}
-                  </div>
+                <ArrowUpRight size={16} />
+              </div>
+            </a>
+          </Reveal>
+        ))}
+      </div>
+
+      {/* Minor projects */}
+      <Reveal delay={120}>
+        <h3 className="font-display" style={{
+          fontSize: "1rem", fontWeight: 700, color: "var(--muted)",
+          letterSpacing: "-0.01em", margin: "3rem 0 1rem",
+        }}>
+          A few smaller builds
+        </h3>
+      </Reveal>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "0.75rem" }}>
+        {MINOR_PROJECTS.map((p, i) => (
+          <Reveal key={p.title} delay={i * 60}>
+            <a
+              href={p.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="focus-ring"
+              style={{
+                display: "flex", alignItems: "center", justifyContent: "space-between",
+                background: "var(--surface)", border: "1px solid var(--border)",
+                borderRadius: "10px", padding: "0.9rem 1rem",
+                textDecoration: "none", transition: "border-color 0.2s, transform 0.15s",
+              }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--accent)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.transform = "translateY(0)"; }}
+            >
+              <div>
+                <p className="font-display" style={{ fontSize: "0.88rem", fontWeight: 700, color: "var(--text)", margin: "0 0 0.3rem" }}>
+                  {p.title}
+                </p>
+                <div style={{ display: "flex", gap: "0.35rem", flexWrap: "wrap" }}>
+                  {p.tags.map(t => <span key={t} className="tag">{t}</span>)}
                 </div>
-                <ExternalLink className="w-4 h-4 text-slate-500 group-hover:text-cyan-300 transition-colors" />
-              </a>
-            </Reveal>
-          ))}
-        </div>
-      </section>
+              </div>
+              <ExternalLink size={14} style={{ color: "var(--muted)", flexShrink: 0 }} />
+            </a>
+          </Reveal>
+        ))}
+      </div>
+    </section>
+  );
+}
 
-      <Waveform />
+/* ─────────────────────────── CERTIFICATIONS ─────────────────────────── */
 
-      {/* CERTIFICATIONS */}
-      <section id="Certifications" className="max-w-4xl mx-auto px-6 py-20">
+function Certifications() {
+  return (
+    <section id="Certifications" style={{ background: "var(--surface)", padding: "5rem 0" }}>
+      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 1.5rem" }}>
+        <Rule />
         <Reveal>
-          <p className="font-mono2 text-xs text-cyan-400/80 mb-3">// Certifications</p>
-          <h2 className="font-display text-3xl sm:text-4xl font-bold text-white mb-10">Verified learning</h2>
+          <span className="font-mono2" style={{ fontSize: "0.7rem", color: "var(--muted)", letterSpacing: "0.1em", display: "block", marginTop: "2rem" }}>
+            004 / CERTIFICATIONS
+          </span>
         </Reveal>
-        <div className="grid sm:grid-cols-2 gap-5">
+        <Reveal delay={80}>
+          <h2 className="font-display" style={{
+            fontSize: "clamp(1.75rem, 4vw, 3rem)", fontWeight: 900,
+            letterSpacing: "-0.03em", color: "var(--text)", margin: "0.5rem 0 2.5rem",
+          }}>
+            Verified learning
+          </h2>
+        </Reveal>
+
+        <div style={{ display: "flex", flexDirection: "column" }}>
           {CERTIFICATIONS.map((c, i) => (
             <Reveal key={c.title} delay={i * 100}>
               <a
                 href={c.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex items-start gap-4 bg-white/[0.03] border border-white/10 rounded-2xl p-6 hover:border-cyan-400/30 transition-colors h-full focus-ring"
+                className="focus-ring"
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "auto 1fr auto",
+                  gap: "1.25rem 2rem",
+                  alignItems: "center",
+                  padding: "1.5rem 0.75rem",
+                  borderBottom: "1px solid var(--border)",
+                  textDecoration: "none",
+                  borderRadius: "4px",
+                  transition: "background 0.2s",
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = "rgba(186,255,41,0.03)"}
+                onMouseLeave={e => e.currentTarget.style.background = "transparent"}
               >
-                <div className="mt-0.5 shrink-0 w-9 h-9 rounded-full bg-cyan-400/10 flex items-center justify-center">
-                  <Award className="w-4.5 h-4.5 text-cyan-300" />
+                {/* Icon */}
+                <div style={{
+                  width: "40px", height: "40px", borderRadius: "10px",
+                  background: "rgba(186,255,41,0.08)", border: "1px solid rgba(186,255,41,0.15)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  flexShrink: 0,
+                }}>
+                  <Award size={18} style={{ color: "var(--accent)" }} />
                 </div>
+
+                {/* Text */}
                 <div>
-                  <p className="text-slate-100 font-medium leading-snug">{c.title}</p>
-                  <p className="text-sm text-slate-400 mt-1">{c.issuer}</p>
-                  <p className="font-mono2 text-xs text-slate-500 mt-1">{c.meta}</p>
-                  <span className="inline-flex items-center gap-1 text-xs text-cyan-300 mt-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                    Verify <ExternalLink className="w-3 h-3" />
-                  </span>
+                  <p className="font-display" style={{ fontSize: "1.05rem", fontWeight: 700, color: "var(--text)", margin: "0 0 0.25rem", letterSpacing: "-0.01em" }}>
+                    {c.title}
+                  </p>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem", alignItems: "center" }}>
+                    <span style={{ color: "var(--muted)", fontSize: "0.85rem" }}>{c.issuer}</span>
+                    <span className="font-mono2" style={{ fontSize: "0.68rem", color: "var(--muted-2)" }}>{c.meta}</span>
+                  </div>
+                </div>
+
+                {/* Verify link */}
+                <div style={{
+                  display: "flex", alignItems: "center", gap: "0.35rem",
+                  fontFamily: "'JetBrains Mono', monospace", fontSize: "0.7rem",
+                  color: "var(--muted)", transition: "color 0.2s",
+                  whiteSpace: "nowrap",
+                }}>
+                  Verify <ExternalLink size={12} />
                 </div>
               </a>
             </Reveal>
           ))}
         </div>
-      </section>
+      </div>
+    </section>
+  );
+}
 
-      {/* CONTACT */}
-      <section id="Contact" className="max-w-4xl mx-auto px-6 py-28 text-center">
-        <Reveal>
-          <p className="font-mono2 text-xs text-cyan-400/80 mb-3">// Connect</p>
-          <h2 className="font-display text-3xl sm:text-5xl font-bold text-white">Let's build something.</h2>
-          <p className="mt-4 text-slate-400 max-w-md mx-auto">
-            Open to interesting project ideas, collaborations, or a good tech conversation.
-          </p>
-        </Reveal>
-        <Reveal delay={150}>
-          <div className="mt-10 flex flex-wrap justify-center gap-4">
-            {[
-              { icon: Github, label: "GitHub", href: "https://github.com/ankit-k26" },
-              { icon: Linkedin, label: "LinkedIn", href: "https://www.linkedin.com/in/ankit-kumar-10o26/" },
-              { icon: Mail, label: "Email", href: "mailto:ankitmukesh2003@email.com" },
-              { icon: Instagram, label: "Instagram", href: "https://www.instagram.com/_.ken_k_/" },
-              { icon: MessageCircle, label: "Discord", href: "https://discord.gg/WBBYCyJbrb" },
-            ].map(({ icon: Icon, label, href }) => (
-              <a
-                key={label}
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group inline-flex items-center gap-2 border border-white/10 rounded-full px-5 py-2.5 text-sm text-slate-300 hover:text-cyan-300 hover:border-cyan-400/40 transition-colors focus-ring min-h-[44px]"
-              >
-                <Icon className="w-4 h-4" /> {label}
-              </a>
-            ))}
-          </div>
-        </Reveal>
-      </section>
+/* ─────────────────────────── CONTACT ───────────────────────────────── */
 
-      <footer className="border-t border-white/5 py-8 text-center font-mono2 text-xs text-slate-600">
-        © 2026 Ankit Kumar — built with React &amp; Tailwind CSS
-      </footer>
+function Contact() {
+  return (
+    <section id="Contact" style={{ padding: "0 1.5rem 6rem" }}>
+      <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+        <div style={{
+          background: "var(--surface)",
+          border: "1px solid var(--border)",
+          borderRadius: "20px",
+          padding: "clamp(2.5rem, 6vw, 5rem)",
+          marginTop: "3rem",
+          position: "relative",
+          overflow: "hidden",
+        }}>
+          {/* BG accent glow */}
+          <div style={{
+            position: "absolute", top: "-80px", right: "-80px",
+            width: "300px", height: "300px",
+            background: "radial-gradient(circle, rgba(186,255,41,0.06) 0%, transparent 70%)",
+            pointerEvents: "none",
+          }} />
+
+          <Reveal>
+            <span className="font-mono2" style={{ fontSize: "0.7rem", color: "var(--muted)", letterSpacing: "0.1em" }}>
+              005 / CONTACT
+            </span>
+          </Reveal>
+
+          <Reveal delay={80}>
+            <h2 className="font-display" style={{
+              fontSize: "clamp(2.5rem, 8vw, 6rem)", fontWeight: 900,
+              letterSpacing: "-0.04em", color: "var(--text)",
+              margin: "0.5rem 0 0.75rem", lineHeight: 0.95,
+            }}>
+              Let's build<br />
+              <span style={{ color: "var(--accent)" }}>something.</span>
+            </h2>
+          </Reveal>
+
+          <Reveal delay={140}>
+            <p style={{ color: "var(--muted)", maxWidth: "400px", lineHeight: 1.7, marginBottom: "2.5rem" }}>
+              Open to interesting project ideas, collaborations, or a good tech conversation.
+            </p>
+          </Reveal>
+
+          <Reveal delay={200}>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "0.65rem" }}>
+              {CONTACTS.map(({ icon: Icon, label, href }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="focus-ring"
+                  style={{
+                    display: "inline-flex", alignItems: "center", gap: "0.5rem",
+                    border: "1px solid var(--border)", borderRadius: "9999px",
+                    padding: "0.55rem 1.1rem",
+                    fontFamily: "'Cabinet Grotesk', sans-serif", fontWeight: 600,
+                    fontSize: "0.85rem", color: "var(--text)",
+                    textDecoration: "none", minHeight: "44px",
+                    transition: "border-color 0.2s, color 0.2s, background 0.2s, transform 0.15s",
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.borderColor = "var(--accent)";
+                    e.currentTarget.style.color = "var(--accent)";
+                    e.currentTarget.style.transform = "translateY(-2px)";
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.borderColor = "var(--border)";
+                    e.currentTarget.style.color = "var(--text)";
+                    e.currentTarget.style.transform = "translateY(0)";
+                  }}
+                >
+                  <Icon size={15} />
+                  {label}
+                </a>
+              ))}
+            </div>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────────── FOOTER ────────────────────────────────── */
+
+function Footer() {
+  return (
+    <footer style={{
+      borderTop: "1px solid var(--border)",
+      padding: "1.5rem",
+    }}>
+      <div style={{
+        maxWidth: "1200px", margin: "0 auto",
+        display: "flex", justifyContent: "space-between", alignItems: "center",
+        flexWrap: "wrap", gap: "0.5rem",
+      }}>
+        <span className="font-mono2" style={{ fontSize: "0.7rem", color: "var(--muted-2)" }}>
+          © 2026 Ankit Kumar
+        </span>
+        <span className="font-mono2" style={{ fontSize: "0.7rem", color: "var(--muted-2)" }}>
+          Built with React &amp; Tailwind CSS v4
+        </span>
+      </div>
+    </footer>
+  );
+}
+
+/* ─────────────────────────── ROOT ──────────────────────────────────── */
+
+export default function Portfolio() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  return (
+    <div className="grain" style={{ background: "var(--bg)", color: "var(--text)", minHeight: "100vh", overflowX: "hidden" }}>
+      <Nav menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+      <Hero />
+      <About />
+      <Stack />
+      <Projects />
+      <Certifications />
+      <Contact />
+      <Footer />
     </div>
   );
 }

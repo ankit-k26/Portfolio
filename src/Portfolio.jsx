@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import {
   Github, Linkedin, Instagram, Mail, ExternalLink,
-  ArrowUpRight, ArrowDown, MessageCircle, Download, Menu, X, Award
+  ArrowUpRight, ArrowDown, MessageCircle, Download, Award
 } from "lucide-react";
 
 /* ─────────────────────────── DATA (unchanged) ──────────────────────── */
@@ -166,7 +166,7 @@ function Rule({ className = "" }) {
 
 /* ─────────────────────────── NAV ────────────────────────────────────── */
 
-function Nav({ menuOpen, setMenuOpen }) {
+function Nav() {
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -175,6 +175,7 @@ function Nav({ menuOpen, setMenuOpen }) {
   }, []);
 
   const navLinks = ["About", "Projects", "Stack", "Certifications", "Contact"];
+
 
   return (
     <nav
@@ -249,68 +250,8 @@ function Nav({ menuOpen, setMenuOpen }) {
             </a>
           </div>
 
-          {/* Mobile hamburger */}
-          <button
-            aria-label="Toggle menu"
-            aria-expanded={menuOpen}
-            onClick={() => setMenuOpen(v => !v)}
-            className="sm:hidden focus-ring"
-            style={{
-              background: "none", border: "none", cursor: "pointer",
-              color: "var(--muted)", minWidth: "44px", minHeight: "44px",
-              display: "flex", alignItems: "center", justifyContent: "center",
-            }}
-            onMouseEnter={e => e.currentTarget.style.color = "var(--accent)"}
-            onMouseLeave={e => e.currentTarget.style.color = "var(--muted)"}
-          >
-            {menuOpen ? <X size={22} /> : <Menu size={22} />}
-          </button>
         </div>
       </div>
-
-      {/* Mobile drawer */}
-      {menuOpen && (
-        <div style={{
-          background: "rgba(10,10,15,0.97)", backdropFilter: "blur(20px)",
-          borderTop: "1px solid var(--border)",
-          padding: "1.25rem 1.5rem 1.75rem",
-          display: "flex", flexDirection: "column", gap: "0.25rem",
-        }}>
-          {navLinks.map((link) => (
-            <a
-              key={link}
-              href={`#${link}`}
-              onClick={() => setMenuOpen(false)}
-              className="focus-ring"
-              style={{
-                fontFamily: "'Cabinet Grotesk', sans-serif", fontWeight: 600,
-                fontSize: "1.15rem", color: "var(--text)", textDecoration: "none",
-                minHeight: "44px", display: "flex", alignItems: "center",
-                borderBottom: "1px solid var(--border)", paddingBottom: "0.75rem",
-                transition: "color 0.2s",
-              }}
-              onMouseEnter={e => e.target.style.color = "var(--accent)"}
-              onMouseLeave={e => e.target.style.color = "var(--text)"}
-            >
-              {link}
-            </a>
-          ))}
-          <a
-            href="/resume.pdf"
-            download
-            style={{
-              display: "inline-flex", alignItems: "center", gap: "0.5rem",
-              background: "var(--accent)", color: "#000",
-              fontFamily: "'Cabinet Grotesk', sans-serif", fontWeight: 700,
-              fontSize: "0.9rem", padding: "0.6rem 1.25rem",
-              borderRadius: "9999px", textDecoration: "none",
-              marginTop: "0.75rem", width: "fit-content",
-            }}
-          >
-            <Download size={14} /> Download Resume
-          </a>
-        </div>
-      )}
     </nav>
   );
 }
@@ -942,11 +883,9 @@ function Footer() {
 /* ─────────────────────────── ROOT ──────────────────────────────────── */
 
 export default function Portfolio() {
-  const [menuOpen, setMenuOpen] = useState(false);
-
   return (
     <div className="grain" style={{ background: "var(--bg)", color: "var(--text)", minHeight: "100vh", overflowX: "hidden" }}>
-      <Nav menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+      <Nav />
       <Hero />
       <About />
       <Stack />

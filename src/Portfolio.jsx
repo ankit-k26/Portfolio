@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Github, Linkedin, Instagram, Mail, ExternalLink,
   ArrowUpRight, ArrowDown, MessageCircle, Download, Award
@@ -84,7 +84,6 @@ const CONTACTS = [
   { icon: Linkedin,      label: "LinkedIn",  href: "https://www.linkedin.com/in/ankit-kumar-10o26/" },
   { icon: Mail,          label: "Email",     href: "mailto:ankitmukesh2003@email.com" },
   { icon: Instagram,     label: "Instagram", href: "https://www.instagram.com/_.ken_k_/" },
-  { icon: MessageCircle, label: "Discord",   href: "https://discord.gg/WBBYCyJbrb" },
 ];
 
 /* ─────────────────────────── HOOKS ─────────────────────────────────── */
@@ -97,7 +96,7 @@ function useReveal() {
     if (!el) return;
     const io = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) { setVisible(true); io.disconnect(); } },
-      { threshold: 0.12 }
+      { threshold: 0.08 }
     );
     io.observe(el);
     return () => io.disconnect();
@@ -114,9 +113,9 @@ function Reveal({ children, delay = 0, className = "" }) {
       ref={ref}
       className={className}
       style={{
-        transition: `opacity 0.65s ease-out ${delay}ms, transform 0.65s ease-out ${delay}ms`,
+        transition: `opacity 0.75s cubic-bezier(0.16,1,0.3,1) ${delay}ms, transform 0.75s cubic-bezier(0.16,1,0.3,1) ${delay}ms`,
         opacity: visible ? 1 : 0,
-        transform: visible ? "translateY(0)" : "translateY(22px)",
+        transform: visible ? "translateY(0)" : "translateY(28px)",
       }}
     >
       {children}
@@ -134,15 +133,15 @@ function RoleRotator() {
     let t;
     if (phase === "typing") {
       if (display.length < current.length) {
-        t = setTimeout(() => setDisplay(current.slice(0, display.length + 1)), 45);
+        t = setTimeout(() => setDisplay(current.slice(0, display.length + 1)), 50);
       } else {
-        t = setTimeout(() => setPhase("pausing"), 1400);
+        t = setTimeout(() => setPhase("pausing"), 1600);
       }
     } else if (phase === "pausing") {
       t = setTimeout(() => setPhase("deleting"), 200);
     } else if (phase === "deleting") {
       if (display.length > 0) {
-        t = setTimeout(() => setDisplay(display.slice(0, -1)), 22);
+        t = setTimeout(() => setDisplay(display.slice(0, -1)), 28);
       } else {
         setIdx((idx + 1) % ROLES.length);
         setPhase("typing");
@@ -152,16 +151,16 @@ function RoleRotator() {
   }, [display, phase, idx]);
 
   return (
-    <span style={{ color: "var(--accent)", fontFamily: "'JetBrains Mono', monospace", fontSize: "0.95rem" }}>
+    <span style={{ color: "var(--amber)", fontFamily: "'Azeret Mono', monospace", fontSize: "0.9rem", letterSpacing: "0.02em" }}>
       {display}
-      <span className="cursor-blink" style={{ display: "inline-block", width: "2px", height: "1em", background: "var(--accent)", marginLeft: "3px", verticalAlign: "middle" }} />
+      <span className="cursor-blink" style={{ display: "inline-block", width: "2px", height: "1.1em", background: "var(--amber)", marginLeft: "3px", verticalAlign: "middle", borderRadius: "1px" }} />
     </span>
   );
 }
 
-/* Thin horizontal ruled divider */
+/* Amber ruled line */
 function Rule({ className = "" }) {
-  return <div className={`ruled ${className}`} />;
+  return <div className={`ruled-amber ${className}`} />;
 }
 
 /* ─────────────────────────── NAV ────────────────────────────────────── */
@@ -169,62 +168,64 @@ function Rule({ className = "" }) {
 function Nav() {
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
+    const onScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   const navLinks = ["About", "Projects", "Stack", "Certifications", "Contact"];
 
-
   return (
     <nav
       style={{
         position: "fixed", top: 0, left: 0, right: 0, zIndex: 50,
         borderBottom: scrolled ? "1px solid var(--border)" : "1px solid transparent",
-        background: scrolled ? "rgba(10,10,15,0.85)" : "transparent",
-        backdropFilter: scrolled ? "blur(16px)" : "none",
-        transition: "background 0.3s, border-color 0.3s, backdrop-filter 0.3s",
+        background: scrolled ? "rgba(15,12,9,0.92)" : "transparent",
+        backdropFilter: scrolled ? "blur(20px)" : "none",
+        transition: "background 0.4s ease, border-color 0.4s ease",
       }}
     >
-      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 1.5rem" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: "64px" }}>
+      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 2rem" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: "68px" }}>
+
           {/* Monogram logo */}
-          <a href="#" className="focus-ring" aria-label="Home" style={{ display: "flex", alignItems: "center", gap: "0.5rem", textDecoration: "none" }}>
-            <span
-              style={{
-                display: "inline-flex", alignItems: "center", justifyContent: "center",
-                width: "34px", height: "34px",
-                background: "var(--accent)",
-                borderRadius: "6px",
-                fontFamily: "'Cabinet Grotesk', sans-serif",
-                fontWeight: 900, fontSize: "0.9rem",
-                color: "#000", letterSpacing: "-0.03em",
-                userSelect: "none",
-              }}
-            >
+          <a href="#" className="focus-ring" aria-label="Home" style={{ display: "flex", alignItems: "center", gap: "0.65rem", textDecoration: "none" }}>
+            {/* Sun circle mark */}
+            <span style={{
+              display: "inline-flex", alignItems: "center", justifyContent: "center",
+              width: "38px", height: "38px",
+              border: "2px solid var(--amber)",
+              borderRadius: "50%",
+              fontFamily: "'Zen Old Mincho', serif",
+              fontWeight: 700, fontSize: "0.8rem",
+              color: "var(--amber)",
+              letterSpacing: "0.02em",
+              userSelect: "none",
+              position: "relative",
+            }}>
               AK
             </span>
-            <span style={{ fontFamily: "'Cabinet Grotesk', sans-serif", fontWeight: 700, fontSize: "1rem", color: "var(--text)", letterSpacing: "-0.02em" }}>
+            <span style={{ fontFamily: "'Zen Old Mincho', serif", fontWeight: 600, fontSize: "0.95rem", color: "var(--text)", letterSpacing: "0.03em" }}>
               Ankit Kumar
             </span>
           </a>
 
           {/* Desktop links */}
-          <div className="hidden sm:flex" style={{ alignItems: "center", gap: "2rem" }}>
+          <div className="hidden sm:flex" style={{ alignItems: "center", gap: "2.5rem" }}>
             {navLinks.map((link) => (
               <a
                 key={link}
                 href={`#${link}`}
                 className="focus-ring hover-line"
                 style={{
-                  fontFamily: "'JetBrains Mono', monospace",
-                  fontSize: "0.75rem", color: "var(--muted)",
+                  fontFamily: "'Chakra Petch', sans-serif",
+                  fontSize: "0.78rem", color: "var(--muted)",
                   textDecoration: "none",
-                  transition: "color 0.2s",
-                  paddingBottom: "2px",
+                  transition: "color 0.25s",
+                  letterSpacing: "0.06em",
+                  textTransform: "uppercase",
                 }}
-                onMouseEnter={e => e.target.style.color = "var(--text)"}
+                onMouseEnter={e => e.target.style.color = "var(--text-warm)"}
                 onMouseLeave={e => e.target.style.color = "var(--muted)"}
               >
                 {link}
@@ -233,20 +234,10 @@ function Nav() {
             <a
               href="/resume.pdf"
               download
-              className="focus-ring"
-              style={{
-                display: "inline-flex", alignItems: "center", gap: "0.4rem",
-                background: "var(--accent)", color: "#000",
-                fontFamily: "'Cabinet Grotesk', sans-serif",
-                fontWeight: 700, fontSize: "0.8rem",
-                padding: "0.45rem 1rem", borderRadius: "9999px",
-                textDecoration: "none",
-                transition: "background 0.2s, transform 0.15s",
-              }}
-              onMouseEnter={e => { e.currentTarget.style.background = "#d4ff5a"; e.currentTarget.style.transform = "translateY(-1px)"; }}
-              onMouseLeave={e => { e.currentTarget.style.background = "var(--accent)"; e.currentTarget.style.transform = "translateY(0)"; }}
+              className="focus-ring btn-primary"
+              style={{ fontSize: "0.78rem", padding: "0.5rem 1.1rem" }}
             >
-              <Download size={12} /> Resume
+              <Download size={13} /> Resume
             </a>
           </div>
 
@@ -261,169 +252,209 @@ function Nav() {
 function Hero() {
   return (
     <section
+      id="home"
       style={{
-        minHeight: "100vh", display: "flex", alignItems: "flex-end",
-        padding: "0 1.5rem 5rem", position: "relative", overflow: "hidden",
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        position: "relative",
+        overflow: "hidden",
+        padding: "0 2rem",
       }}
     >
-      {/* Vertical accent line */}
+      {/* Warm radial glow from center-right */}
       <div style={{
-        position: "absolute", left: "1.5rem", top: "30%", bottom: "20%",
-        width: "1px", background: "linear-gradient(to bottom, transparent, var(--accent), transparent)",
-        opacity: 0.35,
+        position: "absolute", top: "10%", right: "-5%",
+        width: "55vw", height: "55vw", maxWidth: "700px", maxHeight: "700px",
+        background: "radial-gradient(circle, rgba(212,146,42,0.07) 0%, rgba(139,26,26,0.04) 50%, transparent 70%)",
+        borderRadius: "50%",
+        pointerEvents: "none",
       }} />
 
-      {/* Scanline sweep effect */}
-      <div
-        className="scanline"
-        style={{
-          position: "absolute", left: 0, right: 0, height: "1px",
-          background: "linear-gradient(to right, transparent, var(--accent), transparent)",
-          opacity: 0,
-          pointerEvents: "none",
-        }}
-      />
-
-      {/* Large background year — decorative */}
-      <div
-        className="font-display float-y"
-        style={{
-          position: "absolute", right: "-2rem", bottom: "-1rem",
-          fontSize: "clamp(8rem, 25vw, 18rem)",
-          fontWeight: 900, color: "transparent",
-          WebkitTextStroke: "1px rgba(186,255,41,0.07)",
-          userSelect: "none", pointerEvents: "none",
-          lineHeight: 1, letterSpacing: "-0.04em",
-        }}
-      >
-        2026
+      {/* Vertical left accent */}
+      <div className="vertical-accent" style={{
+        position: "absolute", left: "1.5rem", top: "50%",
+        transform: "translateY(-50%)",
+        display: "flex", flexDirection: "column", alignItems: "center", gap: "1.5rem",
+      }}>
+        <span className="vertical-text" style={{ fontSize: "0.7rem" }}>未来を構築する</span>
+        <div style={{ width: "1px", height: "80px", background: "linear-gradient(to bottom, transparent, var(--amber-rule), transparent)" }} />
+        <span className="vertical-text" style={{ fontSize: "0.6rem", opacity: 0.3 }}>2026</span>
       </div>
 
-      <div style={{ maxWidth: "1200px", width: "100%", margin: "0 auto", paddingTop: "80px" }}>
-        {/* Status badge */}
-        <Reveal>
-          <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", marginBottom: "2rem" }}>
-            <span style={{
-              display: "inline-block", width: "7px", height: "7px",
-              borderRadius: "50%", background: "var(--accent)",
-              boxShadow: "0 0 8px var(--accent)",
-              animation: "blink 2s step-end infinite",
-            }} />
-            <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.7rem", color: "var(--muted)", letterSpacing: "0.08em" }}>
-              OPEN TO FULL-STACK &amp; AI/ML ROLES
-            </span>
-          </div>
-        </Reveal>
+      {/* Main content wrapper */}
+      <div style={{ maxWidth: "1280px", width: "100%", margin: "0 auto", paddingTop: "80px" }}>
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "1fr auto",
+          gap: "3rem",
+          alignItems: "center",
+          minHeight: "80vh",
+        }} className="hero-main-grid">
 
-        {/* Name — large editorial display */}
-        <Reveal delay={80}>
-          <h1
-            className="font-display"
+          {/* Left — text column */}
+          <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
+
+            {/* Status pill */}
+            <Reveal>
+              <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", marginBottom: "2.5rem" }}>
+                <span style={{
+                  display: "inline-block", width: "6px", height: "6px",
+                  borderRadius: "50%", background: "var(--amber)",
+                  boxShadow: "0 0 8px var(--amber)",
+                  animation: "pulseAmber 2s ease-in-out infinite",
+                }} />
+                <span className="section-label" style={{ color: "var(--muted)", fontSize: "0.62rem" }}>
+                  OPEN TO FULL-STACK &amp; AI/ML ROLES
+                </span>
+              </div>
+            </Reveal>
+
+            {/* Large display name */}
+            <Reveal delay={80}>
+              <h1
+                className="font-display"
+                style={{
+                  fontSize: "clamp(3.5rem, 10vw, 8.5rem)",
+                  fontWeight: 700,
+                  lineHeight: 0.92,
+                  letterSpacing: "-0.02em",
+                  color: "var(--text)",
+                  margin: "0 0 0.6rem",
+                }}
+              >
+                Ankit<br />
+                <span style={{ color: "var(--amber)" }}>Kumar</span>
+              </h1>
+            </Reveal>
+
+            {/* Role rotator */}
+            <Reveal delay={160}>
+              <div style={{ marginBottom: "2rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <span className="section-label" style={{ color: "var(--muted-2)" }}>—</span>
+                <RoleRotator />
+              </div>
+            </Reveal>
+
+            {/* Tagline */}
+            <Reveal delay={220}>
+              <p style={{
+                maxWidth: "480px",
+                color: "var(--muted)",
+                lineHeight: 1.8,
+                fontSize: "0.95rem",
+                marginBottom: "2.75rem",
+                fontFamily: "'Chakra Petch', sans-serif",
+                fontWeight: 300,
+              }}>
+                I build things at the intersection of AI, computer vision, and thoughtful software —
+                face-authenticated vaults, gesture-controlled interfaces, and local LLM tooling that actually ships.
+              </p>
+            </Reveal>
+
+            {/* CTAs */}
+            <Reveal delay={290}>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem", alignItems: "center" }}>
+                <a href="#Projects" className="focus-ring btn-primary">
+                  View Projects <ArrowUpRight size={15} />
+                </a>
+                <a
+                  href="https://github.com/ankit-k26"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="focus-ring btn-ghost"
+                >
+                  <Github size={15} /> GitHub
+                </a>
+                <a
+                  href="/resume.pdf"
+                  download
+                  className="focus-ring btn-ghost"
+                >
+                  <Download size={15} /> Resume
+                </a>
+              </div>
+            </Reveal>
+
+            {/* Scroll cue */}
+            <Reveal delay={420}>
+              <a
+                href="#About"
+                aria-label="Scroll down"
+                className="focus-ring"
+                style={{
+                  display: "inline-flex", alignItems: "center", gap: "0.5rem",
+                  marginTop: "4rem", color: "var(--muted)", textDecoration: "none",
+                  fontFamily: "'Azeret Mono', monospace", fontSize: "0.62rem",
+                  letterSpacing: "0.1em", transition: "color 0.25s",
+                }}
+                onMouseEnter={e => e.currentTarget.style.color = "var(--amber)"}
+                onMouseLeave={e => e.currentTarget.style.color = "var(--muted)"}
+              >
+                <ArrowDown size={13} style={{ animation: "floatY 2.5s ease-in-out infinite" }} />
+                SCROLL
+              </a>
+            </Reveal>
+          </div>
+
+          {/* Right — geometric sun motif */}
+          <div
+            className="float-y hero-art-col"
             style={{
-              fontSize: "clamp(3.5rem, 12vw, 9rem)",
-              fontWeight: 900,
-              lineHeight: 0.9,
-              letterSpacing: "-0.04em",
-              color: "var(--text)",
-              margin: "0 0 0.5rem",
+              position: "relative",
+              width: "clamp(280px, 35vw, 480px)",
+              flexShrink: 0,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              aspectRatio: "1 / 1",
             }}
           >
-            Ankit<br />
-            <span style={{ color: "var(--accent)" }}>Kumar</span>
-          </h1>
-        </Reveal>
-
-        {/* Role rotator line */}
-        <Reveal delay={160}>
-          <div style={{ marginBottom: "2rem" }}>
-            <RoleRotator />
+            {/* Inline SVG sun — no background artifact */}
+            <svg
+              viewBox="0 0 400 400"
+              xmlns="http://www.w3.org/2000/svg"
+              className="spin-slow"
+              aria-hidden="true"
+              style={{ width: "100%", height: "100%", opacity: 0.55 }}
+            >
+              {/* Concentric rings */}
+              {[180, 150, 122, 96, 72, 50].map((r, i) => (
+                <circle
+                  key={r}
+                  cx="200" cy="200" r={r}
+                  fill="none"
+                  stroke="#D4922A"
+                  strokeWidth={i === 0 ? 1 : 0.6}
+                  opacity={0.18 + i * 0.06}
+                />
+              ))}
+              {/* Radiating lines */}
+              {Array.from({ length: 36 }, (_, i) => {
+                const angle = (i * 10 * Math.PI) / 180;
+                const x1 = 200 + Math.cos(angle) * 96;
+                const y1 = 200 + Math.sin(angle) * 96;
+                const x2 = 200 + Math.cos(angle) * (i % 3 === 0 ? 178 : 162);
+                const y2 = 200 + Math.sin(angle) * (i % 3 === 0 ? 178 : 162);
+                return (
+                  <line
+                    key={i}
+                    x1={x1} y1={y1} x2={x2} y2={y2}
+                    stroke="#D4922A"
+                    strokeWidth="0.8"
+                    opacity={i % 3 === 0 ? 0.5 : 0.28}
+                  />
+                );
+              })}
+              {/* Solid inner disc */}
+              <circle cx="200" cy="200" r="38" fill="#D4922A" opacity="0.14" />
+              <circle cx="200" cy="200" r="28" fill="#D4922A" opacity="0.22" />
+              {/* Outer thin ring */}
+              <circle cx="200" cy="200" r="194" fill="none" stroke="#D4922A" strokeWidth="0.4" opacity="0.1" />
+            </svg>
           </div>
-        </Reveal>
 
-        {/* Tagline */}
-        <Reveal delay={220}>
-          <p style={{
-            maxWidth: "520px", color: "var(--muted)", lineHeight: 1.7,
-            fontSize: "1rem", marginBottom: "2.5rem",
-          }}>
-            I build things at the intersection of AI, computer vision, and thoughtful software —
-            face-authenticated vaults, gesture-controlled interfaces, and local LLM tooling that actually ships.
-          </p>
-        </Reveal>
-
-        {/* CTAs */}
-        <Reveal delay={280}>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem", alignItems: "center" }}>
-            <a
-              href="#Projects"
-              className="focus-ring"
-              style={{
-                display: "inline-flex", alignItems: "center", gap: "0.45rem",
-                background: "var(--accent)", color: "#000",
-                fontFamily: "'Cabinet Grotesk', sans-serif", fontWeight: 700,
-                fontSize: "0.9rem", padding: "0.7rem 1.5rem", borderRadius: "9999px",
-                textDecoration: "none", transition: "background 0.2s, transform 0.15s",
-              }}
-              onMouseEnter={e => { e.currentTarget.style.background = "#d4ff5a"; e.currentTarget.style.transform = "translateY(-2px)"; }}
-              onMouseLeave={e => { e.currentTarget.style.background = "var(--accent)"; e.currentTarget.style.transform = "translateY(0)"; }}
-            >
-              View Projects <ArrowUpRight size={15} />
-            </a>
-            <a
-              href="https://github.com/ankit-k26"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="focus-ring"
-              style={{
-                display: "inline-flex", alignItems: "center", gap: "0.45rem",
-                border: "1px solid var(--border)", color: "var(--text)",
-                fontFamily: "'Cabinet Grotesk', sans-serif", fontWeight: 600,
-                fontSize: "0.9rem", padding: "0.7rem 1.5rem", borderRadius: "9999px",
-                textDecoration: "none", transition: "border-color 0.2s, color 0.2s, transform 0.15s",
-              }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--accent)"; e.currentTarget.style.color = "var(--accent)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.color = "var(--text)"; e.currentTarget.style.transform = "translateY(0)"; }}
-            >
-              <Github size={15} /> GitHub
-            </a>
-            <a
-              href="/resume.pdf"
-              download
-              className="focus-ring"
-              style={{
-                display: "inline-flex", alignItems: "center", gap: "0.45rem",
-                border: "1px solid var(--border)", color: "var(--text)",
-                fontFamily: "'Cabinet Grotesk', sans-serif", fontWeight: 600,
-                fontSize: "0.9rem", padding: "0.7rem 1.5rem", borderRadius: "9999px",
-                textDecoration: "none", transition: "border-color 0.2s, color 0.2s, transform 0.15s",
-              }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--accent)"; e.currentTarget.style.color = "var(--accent)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.color = "var(--text)"; e.currentTarget.style.transform = "translateY(0)"; }}
-            >
-              <Download size={15} /> Resume
-            </a>
-          </div>
-        </Reveal>
-
-        {/* Scroll cue */}
-        <Reveal delay={400}>
-          <a
-            href="#About"
-            aria-label="Scroll down"
-            className="focus-ring"
-            style={{
-              display: "inline-flex", alignItems: "center", gap: "0.5rem",
-              marginTop: "4rem", color: "var(--muted)", textDecoration: "none",
-              fontFamily: "'JetBrains Mono', monospace", fontSize: "0.7rem",
-              letterSpacing: "0.08em", transition: "color 0.2s",
-            }}
-            onMouseEnter={e => e.currentTarget.style.color = "var(--accent)"}
-            onMouseLeave={e => e.currentTarget.style.color = "var(--muted)"}
-          >
-            <ArrowDown size={14} style={{ animation: "floatY 2s ease-in-out infinite" }} />
-            SCROLL
-          </a>
-        </Reveal>
+        </div>
       </div>
     </section>
   );
@@ -433,39 +464,64 @@ function Hero() {
 
 function About() {
   return (
-    <section id="About" style={{ maxWidth: "1200px", margin: "0 auto", padding: "6rem 1.5rem" }}>
-      <Rule />
-      <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "3rem", marginTop: "3rem" }}>
-        {/* Label */}
+    <section id="About" style={{ position: "relative", overflow: "hidden" }}>
+      {/* Illustrated city art — full width top banner */}
+      <div style={{
+        width: "100%", height: "280px",
+        overflow: "hidden",
+        position: "relative",
+      }}>
+        <img
+          src="/about-art.jpg"
+          alt="Illustrated warm futurist cityscape"
+          style={{
+            width: "100%", height: "100%",
+            objectFit: "cover",
+            objectPosition: "center 60%",
+            opacity: 0.65,
+          }}
+        />
+        {/* Fade-to-dark at bottom */}
+        <div style={{
+          position: "absolute", inset: 0,
+          background: "linear-gradient(to bottom, transparent 40%, var(--bg) 100%)",
+        }} />
+      </div>
+
+      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 2rem 6rem" }}>
         <Reveal>
-          <span className="font-mono2" style={{ fontSize: "0.7rem", color: "var(--muted)", letterSpacing: "0.1em" }}>
+          <span className="section-label" style={{ display: "block", marginBottom: "1rem" }}>
             001 / ABOUT
           </span>
         </Reveal>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "3rem" }} className="md-grid-2">
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "5rem", alignItems: "start" }} className="md-grid-2">
+
           {/* Pull quote */}
-          <Reveal delay={100}>
+          <Reveal delay={80}>
             <blockquote
               className="font-display"
               style={{
-                fontSize: "clamp(2rem, 5vw, 3.25rem)",
-                fontWeight: 800, lineHeight: 1.05,
-                letterSpacing: "-0.03em",
-                color: "var(--text)", margin: 0,
-                borderLeft: "none",
+                fontSize: "clamp(2rem, 4.5vw, 3.25rem)",
+                fontWeight: 600,
+                lineHeight: 1.08,
+                letterSpacing: "-0.02em",
+                color: "var(--text)",
+                margin: 0,
+                borderLeft: "3px solid var(--amber)",
+                paddingLeft: "1.5rem",
               }}
             >
               I build to learn,<br />
-              <span style={{ color: "var(--accent)" }}>and ship</span><br />
+              <span style={{ color: "var(--amber)" }}>and ship</span><br />
               to grow.
             </blockquote>
           </Reveal>
 
-          {/* Body text + stats */}
-          <Reveal delay={180}>
-            <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
-              <p style={{ color: "var(--muted)", lineHeight: 1.75, fontSize: "1rem" }}>
+          {/* Body + stats */}
+          <Reveal delay={160}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+              <p style={{ color: "var(--muted)", lineHeight: 1.85, fontSize: "0.95rem", fontWeight: 300 }}>
                 I'm Ankit, an MCA graduate who builds at the intersection of full-stack development and applied AI.
                 I like taking a project from database schema to production-ready UI, and I'm just as comfortable
                 designing a REST API as I am wiring a retrieval-augmented generation pipeline into a working chatbot.
@@ -473,7 +529,7 @@ function About() {
                 computer vision system that turns hand gestures into speech, and an agentic voice assistant that
                 routes commands through LangChain's tool-calling.
               </p>
-              <p style={{ color: "var(--muted)", lineHeight: 1.75, fontSize: "1rem" }}>
+              <p style={{ color: "var(--muted)", lineHeight: 1.85, fontSize: "0.95rem", fontWeight: 300 }}>
                 What ties these together is a preference for understanding why a piece of a system
                 works the way it does — not just that it runs. I'm currently sharpening my grasp of relational
                 databases and cloud deployment to round out the full picture, and I'm looking for a role where I
@@ -481,13 +537,14 @@ function About() {
               </p>
 
               {/* Stat chips */}
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginTop: "0.5rem" }}>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginTop: "0.25rem" }}>
                 {["6 Projects shipped", "Local-first AI", "Full-stack + CV", "Open to hire"].map(s => (
                   <span key={s} style={{
-                    fontFamily: "'JetBrains Mono', monospace", fontSize: "0.68rem",
-                    color: "var(--text)", background: "var(--surface-2)",
-                    border: "1px solid var(--border)", borderRadius: "9999px",
-                    padding: "0.3rem 0.8rem",
+                    fontFamily: "'Azeret Mono', monospace", fontSize: "0.65rem",
+                    color: "var(--text-warm)", background: "var(--surface-2)",
+                    border: "1px solid var(--border)", borderRadius: "3px",
+                    padding: "0.28rem 0.7rem",
+                    letterSpacing: "0.03em",
                   }}>
                     {s}
                   </span>
@@ -495,8 +552,8 @@ function About() {
               </div>
 
               {/* Currently line */}
-              <div style={{ marginTop: "0.75rem", display: "flex", alignItems: "flex-start", gap: "0.5rem" }}>
-                <span className="font-mono2" style={{ fontSize: "0.7rem", color: "var(--muted)", paddingTop: "2px", whiteSpace: "nowrap" }}>currently →</span>
+              <div style={{ marginTop: "0.5rem", display: "flex", alignItems: "center", gap: "0.6rem" }}>
+                <span className="section-label" style={{ color: "var(--muted-2)", fontSize: "0.6rem" }}>currently →</span>
                 <RoleRotator />
               </div>
             </div>
@@ -512,26 +569,26 @@ function About() {
 function Stack() {
   return (
     <section id="Stack" style={{ background: "var(--surface)", padding: "5rem 0" }}>
-      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 1.5rem" }}>
+      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 2rem" }}>
         <Rule />
         <Reveal>
-          <span className="font-mono2" style={{ fontSize: "0.7rem", color: "var(--muted)", letterSpacing: "0.1em", display: "block", marginTop: "2rem", marginBottom: "2.5rem" }}>
+          <span className="section-label" style={{ display: "block", marginTop: "2.5rem", marginBottom: "3rem" }}>
             002 / TECH STACK
           </span>
         </Reveal>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "2rem" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: "2.5rem 3rem" }}>
           {STACK_CATEGORIES.map((cat, i) => (
-            <Reveal key={cat.label} delay={i * 60}>
+            <Reveal key={cat.label} delay={i * 80}>
               <div>
-                <p className="font-mono2" style={{ fontSize: "0.65rem", color: "var(--accent)", letterSpacing: "0.1em", marginBottom: "0.75rem", fontWeight: 500 }}>
+                <p className="section-label" style={{ fontSize: "0.6rem", marginBottom: "0.9rem", color: "var(--amber-dim)" }}>
                   {cat.label.toUpperCase()}
                 </p>
-                <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "0.45rem" }}>
                   {cat.items.map(item => (
                     <span key={item} style={{
-                      fontFamily: "'Cabinet Grotesk', sans-serif", fontWeight: 600,
-                      fontSize: "0.95rem", color: "var(--text)",
+                      fontFamily: "'Chakra Petch', sans-serif", fontWeight: 500,
+                      fontSize: "0.95rem", color: "var(--text-warm)",
                     }}>
                       {item}
                     </span>
@@ -542,13 +599,13 @@ function Stack() {
           ))}
         </div>
 
-        {/* Scrolling marquee strip below */}
-        <div style={{ marginTop: "4rem", overflow: "hidden", position: "relative" }}>
-          <div style={{ position: "absolute", inset: 0, left: 0, width: "6rem", background: "linear-gradient(to right, var(--surface), transparent)", zIndex: 1, pointerEvents: "none" }} />
-          <div style={{ position: "absolute", inset: 0, right: 0, left: "auto", width: "6rem", background: "linear-gradient(to left, var(--surface), transparent)", zIndex: 1, pointerEvents: "none" }} />
-          <div className="marquee-track" style={{ display: "flex", width: "max-content" }}>
+        {/* Scrolling marquee */}
+        <div style={{ marginTop: "4.5rem", overflow: "hidden", position: "relative" }}>
+          <div style={{ position: "absolute", inset: 0, left: 0, width: "8rem", background: "linear-gradient(to right, var(--surface), transparent)", zIndex: 1, pointerEvents: "none" }} />
+          <div style={{ position: "absolute", inset: 0, right: 0, left: "auto", width: "8rem", background: "linear-gradient(to left, var(--surface), transparent)", zIndex: 1, pointerEvents: "none" }} />
+          <div className="marquee-track" style={{ display: "flex", width: "max-content", alignItems: "center", gap: "0" }}>
             {[...STACK_CATEGORIES.flatMap(c => c.items), ...STACK_CATEGORIES.flatMap(c => c.items)].map((s, i) => (
-              <span key={i} className="tag" style={{ margin: "0 0.5rem" }}>{s}</span>
+              <span key={i} className="tag" style={{ margin: "0 0.6rem" }}>{s}</span>
             ))}
           </div>
         </div>
@@ -561,17 +618,18 @@ function Stack() {
 
 function Projects() {
   return (
-    <section id="Projects" style={{ maxWidth: "1200px", margin: "0 auto", padding: "6rem 1.5rem" }}>
+    <section id="Projects" style={{ maxWidth: "1280px", margin: "0 auto", padding: "6rem 2rem" }}>
       <Rule />
       <Reveal>
-        <span className="font-mono2" style={{ fontSize: "0.7rem", color: "var(--muted)", letterSpacing: "0.1em", display: "block", marginTop: "2rem" }}>
+        <span className="section-label" style={{ display: "block", marginTop: "2.5rem" }}>
           003 / PROJECTS
         </span>
       </Reveal>
       <Reveal delay={80}>
         <h2 className="font-display" style={{
-          fontSize: "clamp(2rem, 5vw, 3.5rem)", fontWeight: 900,
-          letterSpacing: "-0.03em", color: "var(--text)", margin: "0.5rem 0 3rem",
+          fontSize: "clamp(2.25rem, 5.5vw, 4rem)", fontWeight: 600,
+          letterSpacing: "-0.02em", color: "var(--text)", margin: "0.75rem 0 3.5rem",
+          lineHeight: 1.05,
         }}>
           Things I've built
         </h2>
@@ -580,7 +638,7 @@ function Projects() {
       {/* Main project list */}
       <div>
         {PROJECTS.map((p, i) => (
-          <Reveal key={p.title} delay={i * 60}>
+          <Reveal key={p.title} delay={i * 55}>
             <a
               href={p.link}
               target="_blank"
@@ -589,40 +647,40 @@ function Projects() {
               style={{
                 display: "grid",
                 gridTemplateColumns: "auto 1fr auto",
-                gap: "1.5rem 2rem",
+                gap: "1.5rem 2.5rem",
                 alignItems: "start",
-                padding: "1.75rem 0",
+                padding: "1.75rem 0.5rem",
                 borderBottom: "1px solid var(--border)",
                 textDecoration: "none",
-                transition: "background 0.2s",
+                transition: "background 0.25s",
                 borderRadius: "4px",
                 cursor: "pointer",
               }}
-              onMouseEnter={e => e.currentTarget.style.background = "rgba(186,255,41,0.03)"}
+              onMouseEnter={e => e.currentTarget.style.background = "rgba(212,146,42,0.04)"}
               onMouseLeave={e => e.currentTarget.style.background = "transparent"}
             >
               {/* Number */}
-              <span className="project-num" style={{ minWidth: "3.5rem" }}>
+              <span className="project-num">
                 {String(i + 1).padStart(2, "0")}
               </span>
 
               {/* Content */}
               <div>
-                <div style={{ display: "flex", alignItems: "baseline", flexWrap: "wrap", gap: "0.5rem", marginBottom: "0.5rem" }}>
+                <div style={{ display: "flex", alignItems: "baseline", flexWrap: "wrap", gap: "0.5rem", marginBottom: "0.6rem" }}>
                   <h3 className="font-display" style={{
-                    fontSize: "1.25rem", fontWeight: 800, color: "var(--text)",
-                    letterSpacing: "-0.02em", margin: 0,
+                    fontSize: "1.3rem", fontWeight: 600, color: "var(--text)",
+                    letterSpacing: "-0.01em", margin: 0,
                     transition: "color 0.2s",
                   }}>
                     {p.title}
                   </h3>
                   {p.subtitle && (
-                    <span style={{ color: "var(--muted)", fontSize: "0.85rem", fontWeight: 400 }}>
+                    <span style={{ color: "var(--muted)", fontSize: "0.85rem", fontWeight: 300, fontFamily: "'Chakra Petch', sans-serif" }}>
                       — {p.subtitle}
                     </span>
                   )}
                 </div>
-                <p style={{ color: "var(--muted)", fontSize: "0.88rem", lineHeight: 1.65, marginBottom: "0.75rem", maxWidth: "600px" }}>
+                <p style={{ color: "var(--muted)", fontSize: "0.875rem", lineHeight: 1.72, marginBottom: "0.8rem", maxWidth: "580px", fontWeight: 300 }}>
                   {p.desc}
                 </p>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
@@ -630,15 +688,16 @@ function Projects() {
                 </div>
               </div>
 
-              {/* Arrow */}
+              {/* Arrow icon */}
               <div style={{
                 display: "flex", alignItems: "center", justifyContent: "center",
-                width: "40px", height: "40px", border: "1px solid var(--border)",
+                width: "40px", height: "40px",
+                border: "1px solid var(--border)",
                 borderRadius: "50%", color: "var(--muted)",
-                transition: "border-color 0.2s, color 0.2s, transform 0.2s",
-                flexShrink: 0, marginTop: "4px",
+                transition: "border-color 0.25s, color 0.25s, transform 0.25s",
+                flexShrink: 0, marginTop: "6px",
               }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--accent)"; e.currentTarget.style.color = "var(--accent)"; e.currentTarget.style.transform = "rotate(45deg)"; }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--amber)"; e.currentTarget.style.color = "var(--amber)"; e.currentTarget.style.transform = "rotate(45deg)"; }}
               onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.color = "var(--muted)"; e.currentTarget.style.transform = "rotate(0deg)"; }}
               >
                 <ArrowUpRight size={16} />
@@ -651,8 +710,8 @@ function Projects() {
       {/* Minor projects */}
       <Reveal delay={120}>
         <h3 className="font-display" style={{
-          fontSize: "1rem", fontWeight: 700, color: "var(--muted)",
-          letterSpacing: "-0.01em", margin: "3rem 0 1rem",
+          fontSize: "1rem", fontWeight: 500, color: "var(--muted)",
+          letterSpacing: "0.01em", margin: "3.5rem 0 1.25rem",
         }}>
           A few smaller builds
         </h3>
@@ -668,21 +727,21 @@ function Projects() {
               style={{
                 display: "flex", alignItems: "center", justifyContent: "space-between",
                 background: "var(--surface)", border: "1px solid var(--border)",
-                borderRadius: "10px", padding: "0.9rem 1rem",
-                textDecoration: "none", transition: "border-color 0.2s, transform 0.15s",
+                borderRadius: "4px", padding: "0.9rem 1.1rem",
+                textDecoration: "none", transition: "border-color 0.25s, transform 0.2s",
               }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--accent)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--amber-rule)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
               onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.transform = "translateY(0)"; }}
             >
               <div>
-                <p className="font-display" style={{ fontSize: "0.88rem", fontWeight: 700, color: "var(--text)", margin: "0 0 0.3rem" }}>
+                <p className="font-display" style={{ fontSize: "0.875rem", fontWeight: 600, color: "var(--text-warm)", margin: "0 0 0.35rem" }}>
                   {p.title}
                 </p>
                 <div style={{ display: "flex", gap: "0.35rem", flexWrap: "wrap" }}>
                   {p.tags.map(t => <span key={t} className="tag">{t}</span>)}
                 </div>
               </div>
-              <ExternalLink size={14} style={{ color: "var(--muted)", flexShrink: 0 }} />
+              <ExternalLink size={13} style={{ color: "var(--muted)", flexShrink: 0, marginLeft: "0.75rem" }} />
             </a>
           </Reveal>
         ))}
@@ -696,23 +755,24 @@ function Projects() {
 function Certifications() {
   return (
     <section id="Certifications" style={{ background: "var(--surface)", padding: "5rem 0" }}>
-      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 1.5rem" }}>
+      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 2rem" }}>
         <Rule />
         <Reveal>
-          <span className="font-mono2" style={{ fontSize: "0.7rem", color: "var(--muted)", letterSpacing: "0.1em", display: "block", marginTop: "2rem" }}>
+          <span className="section-label" style={{ display: "block", marginTop: "2.5rem" }}>
             004 / CERTIFICATIONS
           </span>
         </Reveal>
         <Reveal delay={80}>
           <h2 className="font-display" style={{
-            fontSize: "clamp(1.75rem, 4vw, 3rem)", fontWeight: 900,
-            letterSpacing: "-0.03em", color: "var(--text)", margin: "0.5rem 0 2.5rem",
+            fontSize: "clamp(2rem, 4.5vw, 3.25rem)", fontWeight: 600,
+            letterSpacing: "-0.02em", color: "var(--text)", margin: "0.75rem 0 3rem",
+            lineHeight: 1.08,
           }}>
             Verified learning
           </h2>
         </Reveal>
 
-        <div style={{ display: "flex", flexDirection: "column" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "0" }}>
           {CERTIFICATIONS.map((c, i) => (
             <Reveal key={c.title} delay={i * 100}>
               <a
@@ -723,46 +783,47 @@ function Certifications() {
                 style={{
                   display: "grid",
                   gridTemplateColumns: "auto 1fr auto",
-                  gap: "1.25rem 2rem",
+                  gap: "1.5rem 2rem",
                   alignItems: "center",
-                  padding: "1.5rem 0.75rem",
+                  padding: "1.75rem 0.75rem",
                   borderBottom: "1px solid var(--border)",
                   textDecoration: "none",
                   borderRadius: "4px",
-                  transition: "background 0.2s",
+                  transition: "background 0.25s",
                 }}
-                onMouseEnter={e => e.currentTarget.style.background = "rgba(186,255,41,0.03)"}
+                onMouseEnter={e => e.currentTarget.style.background = "rgba(212,146,42,0.04)"}
                 onMouseLeave={e => e.currentTarget.style.background = "transparent"}
               >
-                {/* Icon */}
+                {/* Award icon with amber glow box */}
                 <div style={{
-                  width: "40px", height: "40px", borderRadius: "10px",
-                  background: "rgba(186,255,41,0.08)", border: "1px solid rgba(186,255,41,0.15)",
+                  width: "48px", height: "48px", borderRadius: "4px",
+                  background: "rgba(212,146,42,0.08)",
+                  border: "1px solid var(--border-warm)",
                   display: "flex", alignItems: "center", justifyContent: "center",
                   flexShrink: 0,
                 }}>
-                  <Award size={18} style={{ color: "var(--accent)" }} />
+                  <Award size={20} style={{ color: "var(--amber)" }} />
                 </div>
 
                 {/* Text */}
                 <div>
-                  <p className="font-display" style={{ fontSize: "1.05rem", fontWeight: 700, color: "var(--text)", margin: "0 0 0.25rem", letterSpacing: "-0.01em" }}>
+                  <p className="font-display" style={{ fontSize: "1.05rem", fontWeight: 600, color: "var(--text)", margin: "0 0 0.35rem", letterSpacing: "-0.01em" }}>
                     {c.title}
                   </p>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem", alignItems: "center" }}>
-                    <span style={{ color: "var(--muted)", fontSize: "0.85rem" }}>{c.issuer}</span>
-                    <span className="font-mono2" style={{ fontSize: "0.68rem", color: "var(--muted-2)" }}>{c.meta}</span>
+                    <span style={{ color: "var(--muted)", fontSize: "0.875rem", fontFamily: "'Chakra Petch', sans-serif", fontWeight: 300 }}>{c.issuer}</span>
+                    <span className="font-mono" style={{ fontSize: "0.65rem", color: "var(--muted-2)", letterSpacing: "0.06em" }}>{c.meta}</span>
                   </div>
                 </div>
 
-                {/* Verify link */}
+                {/* Verify badge */}
                 <div style={{
-                  display: "flex", alignItems: "center", gap: "0.35rem",
-                  fontFamily: "'JetBrains Mono', monospace", fontSize: "0.7rem",
+                  display: "flex", alignItems: "center", gap: "0.4rem",
+                  fontFamily: "'Azeret Mono', monospace", fontSize: "0.65rem",
                   color: "var(--muted)", transition: "color 0.2s",
-                  whiteSpace: "nowrap",
+                  whiteSpace: "nowrap", letterSpacing: "0.04em",
                 }}>
-                  Verify <ExternalLink size={12} />
+                  Verify <ExternalLink size={11} />
                 </div>
               </a>
             </Reveal>
@@ -777,49 +838,78 @@ function Certifications() {
 
 function Contact() {
   return (
-    <section id="Contact" style={{ padding: "0 1.5rem 6rem" }}>
-      <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+    <section id="Contact" style={{ padding: "0 2rem 6rem" }}>
+      <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
         <div style={{
           background: "var(--surface)",
           border: "1px solid var(--border)",
-          borderRadius: "20px",
-          padding: "clamp(2.5rem, 6vw, 5rem)",
+          borderRadius: "6px",
+          padding: "clamp(2.5rem, 6vw, 5.5rem)",
           marginTop: "3rem",
           position: "relative",
           overflow: "hidden",
         }}>
-          {/* BG accent glow */}
+
+          {/* Background sun motif — inline SVG, no background artifact */}
+          <svg
+            viewBox="0 0 400 400"
+            xmlns="http://www.w3.org/2000/svg"
+            className="spin-slow"
+            aria-hidden="true"
+            style={{
+              position: "absolute",
+              top: "-20%",
+              right: "-8%",
+              width: "420px",
+              height: "420px",
+              opacity: 0.09,
+              pointerEvents: "none",
+              userSelect: "none",
+            }}
+          >
+            {[180, 150, 122, 96, 72].map((r, i) => (
+              <circle key={r} cx="200" cy="200" r={r} fill="none" stroke="#D4922A" strokeWidth={i === 0 ? 1 : 0.7} />
+            ))}
+            {Array.from({ length: 36 }, (_, i) => {
+              const angle = (i * 10 * Math.PI) / 180;
+              const x1 = 200 + Math.cos(angle) * 96;
+              const y1 = 200 + Math.sin(angle) * 96;
+              const x2 = 200 + Math.cos(angle) * (i % 3 === 0 ? 178 : 162);
+              const y2 = 200 + Math.sin(angle) * (i % 3 === 0 ? 178 : 162);
+              return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#D4922A" strokeWidth="0.8" />;
+            })}
+            <circle cx="200" cy="200" r="38" fill="#D4922A" opacity="0.5" />
+          </svg>
+
+          {/* Amber accent rule */}
           <div style={{
-            position: "absolute", top: "-80px", right: "-80px",
-            width: "300px", height: "300px",
-            background: "radial-gradient(circle, rgba(186,255,41,0.06) 0%, transparent 70%)",
-            pointerEvents: "none",
+            position: "absolute", top: 0, left: 0, right: 0, height: "2px",
+            background: "linear-gradient(to right, transparent, var(--amber), transparent)",
+            opacity: 0.5,
           }} />
 
           <Reveal>
-            <span className="font-mono2" style={{ fontSize: "0.7rem", color: "var(--muted)", letterSpacing: "0.1em" }}>
-              005 / CONTACT
-            </span>
+            <span className="section-label">005 / CONTACT</span>
           </Reveal>
 
           <Reveal delay={80}>
             <h2 className="font-display" style={{
-              fontSize: "clamp(2.5rem, 8vw, 6rem)", fontWeight: 900,
-              letterSpacing: "-0.04em", color: "var(--text)",
-              margin: "0.5rem 0 0.75rem", lineHeight: 0.95,
+              fontSize: "clamp(2.75rem, 9vw, 7rem)", fontWeight: 600,
+              letterSpacing: "-0.03em", color: "var(--text)",
+              margin: "0.75rem 0 1rem", lineHeight: 0.92,
             }}>
               Let's build<br />
-              <span style={{ color: "var(--accent)" }}>something.</span>
+              <span style={{ color: "var(--amber)" }}>something.</span>
             </h2>
           </Reveal>
 
-          <Reveal delay={140}>
-            <p style={{ color: "var(--muted)", maxWidth: "400px", lineHeight: 1.7, marginBottom: "2.5rem" }}>
+          <Reveal delay={150}>
+            <p style={{ color: "var(--muted)", maxWidth: "400px", lineHeight: 1.8, marginBottom: "2.75rem", fontWeight: 300, fontSize: "0.95rem" }}>
               Open to interesting project ideas, collaborations, or a good tech conversation.
             </p>
           </Reveal>
 
-          <Reveal delay={200}>
+          <Reveal delay={210}>
             <div style={{ display: "flex", flexWrap: "wrap", gap: "0.65rem" }}>
               {CONTACTS.map(({ icon: Icon, label, href }) => (
                 <a
@@ -830,21 +920,21 @@ function Contact() {
                   className="focus-ring"
                   style={{
                     display: "inline-flex", alignItems: "center", gap: "0.5rem",
-                    border: "1px solid var(--border)", borderRadius: "9999px",
-                    padding: "0.55rem 1.1rem",
-                    fontFamily: "'Cabinet Grotesk', sans-serif", fontWeight: 600,
-                    fontSize: "0.85rem", color: "var(--text)",
+                    border: "1px solid var(--border-warm)", borderRadius: "3px",
+                    padding: "0.6rem 1.2rem",
+                    fontFamily: "'Chakra Petch', sans-serif", fontWeight: 500,
+                    fontSize: "0.875rem", color: "var(--text-warm)",
                     textDecoration: "none", minHeight: "44px",
                     transition: "border-color 0.2s, color 0.2s, background 0.2s, transform 0.15s",
                   }}
                   onMouseEnter={e => {
-                    e.currentTarget.style.borderColor = "var(--accent)";
-                    e.currentTarget.style.color = "var(--accent)";
+                    e.currentTarget.style.borderColor = "var(--amber)";
+                    e.currentTarget.style.color = "var(--amber)";
                     e.currentTarget.style.transform = "translateY(-2px)";
                   }}
                   onMouseLeave={e => {
-                    e.currentTarget.style.borderColor = "var(--border)";
-                    e.currentTarget.style.color = "var(--text)";
+                    e.currentTarget.style.borderColor = "var(--border-warm)";
+                    e.currentTarget.style.color = "var(--text-warm)";
                     e.currentTarget.style.transform = "translateY(0)";
                   }}
                 >
@@ -866,17 +956,28 @@ function Footer() {
   return (
     <footer style={{
       borderTop: "1px solid var(--border)",
-      padding: "1.5rem",
+      padding: "1.75rem 2rem",
     }}>
       <div style={{
-        maxWidth: "1200px", margin: "0 auto",
+        maxWidth: "1280px", margin: "0 auto",
         display: "flex", justifyContent: "space-between", alignItems: "center",
-        flexWrap: "wrap", gap: "0.5rem",
+        flexWrap: "wrap", gap: "0.75rem",
       }}>
-        <span className="font-mono2" style={{ fontSize: "0.7rem", color: "var(--muted-2)" }}>
-          © 2026 Ankit Kumar
-        </span>
-        <span className="font-mono2" style={{ fontSize: "0.7rem", color: "var(--muted-2)" }}>
+        {/* Left — monogram + year */}
+        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+          <span style={{
+            fontFamily: "'Zen Old Mincho', serif", fontWeight: 600, fontSize: "0.7rem",
+            color: "var(--amber-dim)", letterSpacing: "0.1em",
+          }}>
+            未来を構築する
+          </span>
+          <span style={{ width: "1px", height: "12px", background: "var(--muted-2)", display: "inline-block" }} />
+          <span className="font-mono" style={{ fontSize: "0.65rem", color: "var(--muted-2)", letterSpacing: "0.05em" }}>
+            © 2026 Ankit Kumar
+          </span>
+        </div>
+
+        <span className="font-mono" style={{ fontSize: "0.65rem", color: "var(--muted-2)", letterSpacing: "0.04em" }}>
           Built with React &amp; Tailwind CSS v4
         </span>
       </div>

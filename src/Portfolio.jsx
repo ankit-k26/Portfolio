@@ -277,7 +277,6 @@ function Hero() {
         transform: "translateY(-50%)",
         display: "flex", flexDirection: "column", alignItems: "center", gap: "1.5rem",
       }}>
-        <span className="vertical-text" style={{ fontSize: "0.7rem" }}>未来を構築する</span>
         <div style={{ width: "1px", height: "80px", background: "linear-gradient(to bottom, transparent, var(--amber-rule), transparent)" }} />
         <span className="vertical-text" style={{ fontSize: "0.6rem", opacity: 0.3 }}>2026</span>
       </div>
@@ -965,13 +964,6 @@ function Footer() {
       }}>
         {/* Left — monogram + year */}
         <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-          <span style={{
-            fontFamily: "'Zen Old Mincho', serif", fontWeight: 600, fontSize: "0.7rem",
-            color: "var(--amber-dim)", letterSpacing: "0.1em",
-          }}>
-            未来を構築する
-          </span>
-          <span style={{ width: "1px", height: "12px", background: "var(--muted-2)", display: "inline-block" }} />
           <span className="font-mono" style={{ fontSize: "0.65rem", color: "var(--muted-2)", letterSpacing: "0.05em" }}>
             © 2026 Ankit Kumar
           </span>
